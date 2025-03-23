@@ -78,11 +78,11 @@ CREATE TABLE Chat (
 CREATE TABLE Message (
   messageId INTEGER PRIMARY KEY AUTOINCREMENT,
   chatId INTEGER NOT NULL,
-  sender INTEGER NOT NULL,
+  studentId_sender INTEGER NOT NULL,
   content VARCHAR NOT NULL,
   date DATE NOT NULL,
   FOREIGN KEY(chatId) REFERENCES Chat(chatId),
-  FOREIGN KEY(sender) REFERENCES Student(studentId)
+  FOREIGN KEY(studentId_sender) REFERENCES Student(studentId)
 );
 
 CREATE TABLE ChatParticipent (
@@ -94,9 +94,9 @@ CREATE TABLE ChatParticipent (
 
 CREATE TABLE ChatSeen (
   chatId INTEGER NOT NULL,
-  receiver INTEGER NOT NULL,
+  studentId_receiver INTEGER NOT NULL,
   messageId INTEGER NOT NULL,
   FOREIGN KEY(chatId) REFERENCES Chat(chatId),
-  FOREIGN KEY(receiver) REFERENCES Student(studentId),
+  FOREIGN KEY(studentId_receiver) REFERENCES Student(studentId),
   FOREIGN KEY(messageId) REFERENCES Message(messageId)
 );
