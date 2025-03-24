@@ -1,0 +1,11 @@
+/* Main section for the courses page*/
+.main-courses {
+    background-color: var(--fifth-color);
+    padding: 20px;
+    margin: 95px auto; 
+    width: 95%; 
+    max-width: 1000px; 
+    border-radius: 20px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    text-align: center; 
+}

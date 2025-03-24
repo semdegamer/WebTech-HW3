@@ -1,0 +1,24 @@
+/* Import a font and other css files */
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+@import url("../css/header.css");
+@import url("../css/messages.css");
+@import url("../css/courses.css");
+@import url("../css/profile.css");
+
+/* General styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Patrick Hand";
+    letter-spacing: 1px;
+}
+
+/* Color Palette */
+:root {
+    --first-color: #7EC384;
+    --second-color: #3F7856;
+    --third-color: #45625D;
+    --fourth-color: #6AA5A9;
+    --fifth-color: #A3D2D5;
+}
