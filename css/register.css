@@ -1,0 +1,56 @@
+/* Main section for the register/ login page */
+.main-register {
+    background-color: var(--fifth-color);
+    padding: 20px;
+    margin: 95px auto;
+    width: 95%;
+    max-width: 400px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+/* Register and login form*/
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Text input fields*/
+input {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 0 auto;
+}
+
+/* Button container */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin: auto;
+}
+
+/* Button */
+button {
+    width: 50%;
+    background: var(--first-color);
+    color: white;
+    padding: 10px;
+    border: 3px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: auto;
+}
+button:hover {
+    background: var(--second-color);
+}
+
+/* Error message*/
+.error {
+    color: red;
+    font-size: 12px;
+}

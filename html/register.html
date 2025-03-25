@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A website with a social network, message with your friends."/>
+    <title>Register</title>
+    <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+    <div class="main-register">
+        <!-- Register form -->
+        <h2>Register</h2>
+        <form id="registerForm">
+            <input type="text" id="firstName" placeholder="First Name" required>
+            <input type="text" id="lastName" placeholder="Last Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="confirmPassword" placeholder="Repeat Password" required>
+            <p id="errorMessage" class="error"></p>
+            <div class="button-group">
+                <button type="submit">Register</button>
+                <button type="button" id="signUpBtn" onclick="window.location.href = 'login.html';">Login</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Password match script -->
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirmPassword").value;
+            let errorMessage = document.getElementById("errorMessage");
+            
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                errorMessage.textContent = "Passwords do not match!";
+            } else {
+                errorMessage.textContent = "";
+            }
+        });
+    </script>
+</body>
+</html>
