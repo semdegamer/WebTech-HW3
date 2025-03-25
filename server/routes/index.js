@@ -3,9 +3,14 @@ var router = express.Router();
 
 var nav = ["messages", "courses"];
 
-/* GET Profile Page */
-router.get('/profile', function(req, res) {
-  res.render('user/profile', { nav: nav});
+/* GET Messages Page */
+router.get('/', function(req, res) {
+  res.redirect('/messages');
+});
+
+/* GET Messages Page */
+router.get('/messages', function(req, res) {
+  res.render('user/messages', { nav: nav});
 });
 
 /* GET Courses Page */
@@ -13,9 +18,9 @@ router.get('/courses', function(req, res) {
   res.render('user/courses', { nav: nav});
 });
 
-/* GET Messages Page */
-router.get('/messages', function(req, res) {
-  res.render('user/messages', { nav: nav});
+/* GET Profile Page */
+router.get('/profile', function(req, res) {
+  res.render('user/profile', { nav: nav});
 });
 
 /* GET Login Page */
