@@ -3,7 +3,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--third-color); 
+    background-color: var(--dark-green-color); 
     padding: 15px 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     position: fixed;
@@ -25,7 +25,7 @@ header {
     color: white; 
     font-size: 1.5rem;
     font-weight: bold;
-    background-color: var(--first-color); 
+    background-color: var(--light-green-color); 
     padding: 5px 15px; 
     border: 3px solid white; 
     border-radius: 10px; 
@@ -33,11 +33,11 @@ header {
 }
 
 .header-nav .nav-link:hover {
-    background-color: var(--second-color); 
+    background-color: var(--medium-green-color); 
 }
 
 .header-nav .nav-link.active {
-    background-color: var(--second-color); 
+    background-color: var(--medium-green-color); 
 }
 
 /* Profile Picture */

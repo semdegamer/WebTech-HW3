@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  main.main-profile
+    h1 Profile
+    .profile-sections
+      .profile-box 
+        // Avatar (Profile Picture)
+        div.avatar
+          img(src="../images/blank-profile.jpg" alt="Avatar" class="avatar-img")
+        
+        // Button to change the avatar
+        button.change-avatar-btn(type="button" onclick="changeAvatar()") Change Avatar
+        
+        // Name 
+        h2.profile-name Emma Bout   
+      .profile-box 
+        h2.profile-friend Friend Requests
+      .profile-box 
+        h2.profile-edit Edit Profile
