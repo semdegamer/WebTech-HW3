@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\semma\\Documents\\GitHub\\UU\\WebTech-HW3\\solution\\WebTech_HW3_Code\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B44BFF58-E71F-D651-F310-8C357AA43C47}|HW3\\HW3.esproj|c:\\users\\semma\\documents\\github\\uu\\webtech-hw3\\solution\\webtech_hw3_code\\hw3\\bin\\www||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{B44BFF58-E71F-D651-F310-8C357AA43C47}|HW3\\HW3.esproj|solutionrelative:hw3\\bin\\www||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B44BFF58-E71F-D651-F310-8C357AA43C47}|HW3\\HW3.esproj|c:\\users\\semma\\documents\\github\\uu\\webtech-hw3\\solution\\webtech_hw3_code\\hw3\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{B44BFF58-E71F-D651-F310-8C357AA43C47}|HW3\\HW3.esproj|solutionrelative:hw3\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
@@ -47,6 +51,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "www",
+              "DocumentMoniker": "C:\\Users\\semma\\Documents\\GitHub\\UU\\WebTech-HW3\\solution\\WebTech_HW3_Code\\HW3\\bin\\www",
+              "RelativeDocumentMoniker": "HW3\\bin\\www",
+              "ToolTip": "C:\\Users\\semma\\Documents\\GitHub\\UU\\WebTech-HW3\\solution\\WebTech_HW3_Code\\HW3\\bin\\www",
+              "RelativeToolTip": "HW3\\bin\\www",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-25T13:14:22.246Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "app.js",
               "DocumentMoniker": "C:\\Users\\semma\\Documents\\GitHub\\UU\\WebTech-HW3\\solution\\WebTech_HW3_Code\\HW3\\app.js",
               "RelativeDocumentMoniker": "HW3\\app.js",
