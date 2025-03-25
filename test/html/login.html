@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A website with a social network, message with your friends."/>
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+    <div class="main-register">
+        <!-- Login form -->
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <p id="errorMessage" class="error"></p>
+            <div class="button-group">
+                <button type="submit">Login</button>
+                <button type="button" id="signUpBtn" onclick="window.location.href = 'register.html';">Sign Up</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Login form script -->
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Get email and password from text inputs
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            let errorMessage = document.getElementById("errorMessage");
+
+            // Dummy mail and password
+            const validEmail = "test@example.com";
+            const validPassword = "password123";
+
+            // Validation
+            if (email === validEmail && password === validPassword) {
+                window.location.href = 'courses.html';
+            } else {
+                errorMessage.textContent = "Invalid email or password.";
+            }
+        });
+    </script>
+</body>
+</html>
