@@ -1,10 +1,5 @@
 /* Import a font and other css files */
 @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
-@import url("../stylesheets/header.css");
-@import url("../stylesheets/messages.css");
-@import url("../stylesheets/courses.css");
-@import url("../stylesheets/profile.css");
-@import url("../stylesheets/logreg.css");
 
 /* General styles */
 * {

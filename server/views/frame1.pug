@@ -4,17 +4,11 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     meta(name="description", content="A website with a social network, message with your friends.")
-    title= title
+    title=title
     link(rel="stylesheet" href="../stylesheets/styles.css")
   body
     header
-      nav.header-nav
-        ul
-          li: a.nav-link(href="/messages") Messages
-          li: a.nav-link(href="/courses") Courses
+      include header
 
-      div.profile-picture
-        a(href="/profile")
-          img(src="../images/blank-profile.jpg" alt="My Profile Picture")
-
-    block content
+    main
+      block main

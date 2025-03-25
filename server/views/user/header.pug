@@ -1,0 +1,15 @@
+header
+  nav.header-nav
+    ul
+      each item in nav
+        - var text = item[0].toUpperCase() + item.slice(1).toLowerCase();
+        - var link = "/" + item
+        li
+          - if (item == navSelected)
+            a.nav-link(href=link, class="nav-link--pressed")=text
+          - else
+            a.nav-link(href=link)=text
+
+  div.profile-picture
+    a(href="/profile")
+      img(src="../images/blank-profile.jpg" alt="My Profile Picture")
