@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "label": "Launch node",
+      "type": "shell",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "cd server && node bin/www"
+      ],
+      "problemMatcher": []
+    }
+	]
+}
