@@ -32,11 +32,9 @@ header {
     transition: background-color 0.3s ease-in-out;
 }
 
-.header-nav .nav-link:hover {
-    background-color: var(--medium-green-color); 
-}
-
-.header-nav .nav-link.active {
+.header-nav .nav-link:hover,
+.header-nav .nav-link.active,
+.header-nav .nav-link--pressed {
     background-color: var(--medium-green-color); 
 }
 

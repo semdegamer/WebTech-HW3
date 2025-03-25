@@ -1,0 +1,11 @@
+extends defaultUser
+
+block append vars
+  - var title = "Messages"
+  - styles.push("user/messages")
+  - var navSelected = "messages"
+
+block main
+  main.main-messages
+    h1 Messages
+    h2 hoi

@@ -1,6 +1,10 @@
-extends layout
+extends defaultUser
 
-block content
+block append vars
+  - var title = "Profile";
+  - styles.push("user/profile")
+
+block main
   main.main-profile
     h1 Profile
     .profile-sections

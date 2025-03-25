@@ -1,0 +1,37 @@
+extends defaultAuth
+
+block append vars
+  - var title = "Login";
+  - styles.push("auth/logreg")
+
+block main
+  main.main-logreg
+    h2 Login
+    form#loginForm
+      input(type="email", id="email", placeholder="Email", required)
+      input(type="password", id="password", placeholder="Password", required)
+      p#errorMessage.error
+      .button-group
+        button(type="submit", id="logreg-button") Login
+        button(type="button", id="logreg-button", onclick="window.location.href = '/register';") Sign Up
+
+  script.
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Get email and password from text inputs
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+      let errorMessage = document.getElementById("errorMessage");
+
+      // Dummy mail and password
+      const validEmail = "test@example.com";
+      const validPassword = "password123";
+
+      // Validation
+      if (email === validEmail && password === validPassword) {
+        window.location.href = '/courses';
+      } else {
+        errorMessage.textContent = "Invalid email or password.";
+      }
+    });

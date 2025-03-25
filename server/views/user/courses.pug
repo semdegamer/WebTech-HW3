@@ -1,0 +1,10 @@
+extends defaultUser
+
+block append vars
+  - var title = "Courses"
+  - styles.push("user/courses")
+  - var navSelected = "courses"
+
+block main
+  main.main-courses
+    h1 Courses

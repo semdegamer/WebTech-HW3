@@ -1,0 +1,10 @@
+extends ../default
+
+block append vars
+  - styles.push("header")
+
+block body
+  body
+    include header
+    block main
+

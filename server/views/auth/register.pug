@@ -1,0 +1,33 @@
+extends defaultAuth
+
+block append vars
+  - var title = "Register"
+  - styles.push("auth/logreg")
+
+block main
+  main.main-logreg
+    h2 Register
+    form#registerForm
+      input(type="text", id="firstName", placeholder="First Name", required)
+      input(type="text", id="lastName", placeholder="Last Name", required)
+      input(type="email", id="email", placeholder="Email", required)
+      input(type="password", id="password", placeholder="Password", required)
+      input(type="password", id="confirmPassword", placeholder="Repeat Password", required)
+      p#errorMessage.error
+      .button-group
+        button(type="submit", id="logreg-button") Register
+        button(type="button", id="logreg-button", onclick="window.location.href = '/login';") Login
+
+  script.
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+      let password = document.getElementById("password").value;
+      let confirmPassword = document.getElementById("confirmPassword").value;
+      let errorMessage = document.getElementById("errorMessage");
+      
+      if (password !== confirmPassword) {
+        event.preventDefault();
+        errorMessage.textContent = "Passwords do not match!";
+      } else {
+        errorMessage.textContent = "";
+      }
+    });
