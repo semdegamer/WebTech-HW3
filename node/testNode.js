@@ -3,7 +3,8 @@ const port = 8046;
 const url = require("url");
 const server = http.createServer();
 
-const sqlite3 = require("sqlite3").verbose();
+const sqlite3 = require("sqlite3").verbose(); // verbose for better error logging
+const dbPath = __dirname + "/sqlite.db";
 const db = new sqlite3.Database(":memory:"); // for now in memory for easy testing
 const execute = async (db, sql) => {
   return new Promise((resolve, reject) => {
@@ -14,22 +15,20 @@ const execute = async (db, sql) => {
   });
 };
 
-const fs = require("fs");
+const fs = require("fs/promises");
+fs.readFile("dbdef.txt", (err, sql) => 
 {
-  fs.readFile("dbdef.txt", (err, sql) => 
+  if(err)
   {
-    if(err)
-    {
-      console.error(err);
-      return;
-    }
-    
-    execute(db, sql.toString()).catch((err) =>
-    {
-      console.error(err);
-    });
+    console.error(err);
+    return;
+  }
+  
+  execute(db, sql.toString()).catch((err) =>
+  {
+    console.error(err);
   });
-}
+});
 
 server.on("request", (req, res) => 
 {
