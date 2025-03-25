@@ -1,6 +1,6 @@
-/* Main section for the register/ login page */
-.main-register {
-    background-color: var(--fifth-color);
+/* Main section for the login and register page */
+.main-logreg {
+    background-color: var(--light-blue-color);
     padding: 20px;
     margin: 95px auto;
     width: 95%;
@@ -9,7 +9,7 @@
     text-align: center;
 }
 
-/* Register and login form*/
+/* Login and Register form*/
 form {
     display: flex;
     flex-direction: column;
@@ -35,9 +35,9 @@ input {
 }
 
 /* Button */
-button {
+#logreg-button {
     width: 50%;
-    background: var(--first-color);
+    background: var(--light-green-color);
     color: white;
     padding: 10px;
     border: 3px solid white;
@@ -45,8 +45,9 @@ button {
     cursor: pointer;
     margin: auto;
 }
-button:hover {
-    background: var(--second-color);
+
+#logreg-button:hover {
+    background: var(--dark-green-color);
 }
 
 /* Error message*/

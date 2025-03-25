@@ -1,0 +1,93 @@
+/* Main section for the profile page*/
+.main-profile {
+    background-color: var(--light-blue-color);
+    padding: 20px;
+    margin: 95px auto; 
+    width: 95%; 
+    max-width: 1500px; 
+    border-radius: 20px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    text-align: center; 
+}
+
+/* Container for the three boxes */
+.profile-sections {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 0 20px;
+}
+
+/* Individual boxes */
+.profile-box {
+    background-color: var(--dark-blue-color);
+    height: 600px; 
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Box 1 */
+.profile-box:first-child {
+    flex: 0 0 25%;
+}
+
+/* Box 2 */
+.profile-box:nth-child(2) {
+    flex: 0 0 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; 
+    padding-top: 20px; 
+}
+
+/* Box 3 */
+.profile-box:nth-child(3) {
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; 
+    padding-top: 20px; 
+}
+
+/* Style the avatar (profile picture) */
+.avatar-img {
+    width: 250px;  
+    height: 250px; 
+    border-radius: 50%; 
+    object-fit: cover;  
+    margin-bottom: -30px;
+}
+  
+/* Style the Change Avatar button */
+.change-avatar-btn {
+    background-color: var(--light-orange-color);  
+    color: white;
+    border: 3px solid white; 
+    padding: 10px 15px;  
+    font-size: 14px;   
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.1s ease-in-out;
+}
+  
+.change-avatar-btn:hover {
+    background-color: var(--dark-orange-color); 
+}
+
+/* Style of the name */
+.profile-name {
+    margin-top: 10px; 
+    font-size: 3rem;
+}
+
+.profile-friend, .profile-edit {
+    font-size: 2rem;
+}
+
