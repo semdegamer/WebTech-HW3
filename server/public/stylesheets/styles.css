@@ -12,6 +12,7 @@
 
 body {
     background-color: var(--olive-green-color);
+    min-height: 100vh;
 }
 
 /* Color Palette */

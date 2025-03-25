@@ -1,12 +1,18 @@
 /* Main section for the login and register page */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .main-logreg {
     background-color: var(--light-blue-color);
     padding: 20px;
-    margin: 95px auto;
-    width: 95%;
-    max-width: 400px;
+    max-width: 95%;
+    min-width: 360px;
     border-radius: 20px;
     text-align: center;
+    align-self: center;
 }
 
 /* Login and Register form*/
@@ -17,9 +23,12 @@ form {
     margin-top: 20px;
 }
 
-/* Text input fields*/
+/* Text label/input fields*/
+label {
+    text-align: left;
+}
 input {
-    width: 90%;
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -36,7 +45,7 @@ input {
 }
 
 /* Button */
-#logreg-button {
+#submit-button {
     width: 50%;
     background: var(--light-green-color);
     color: white;
@@ -47,8 +56,17 @@ input {
     margin: auto;
 }
 
-#logreg-button:hover {
+#submit-button:hover {
     background: var(--dark-green-color);
+}
+
+form a {
+    width: 50%;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: auto;
 }
 
 /* Error message*/

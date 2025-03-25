@@ -8,12 +8,14 @@ block main
   main.main-logreg
     h2 Login
     form#loginForm
+      label(for="email") Enter email:
       input(type="email", id="email", placeholder="Email", required)
+      label(for="password") Enter password:
       input(type="password", id="password", placeholder="Password", required)
       p#errorMessage.error
       .button-group
-        button(type="submit", id="logreg-button") Login
-        button(type="button", id="logreg-button", onclick="window.location.href = '/register';") Sign Up
+        button(type="submit", id="submit-button") Login
+        a(href="register") Sign Up
 
   script.
     document.getElementById("loginForm").addEventListener("submit", function(event) {

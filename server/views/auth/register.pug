@@ -8,15 +8,20 @@ block main
   main.main-logreg
     h2 Register
     form#registerForm
+      label(for="firstName") Enter first name:
       input(type="text", id="firstName", placeholder="First Name", required)
+      label(for="lastName") Enter Last name:
       input(type="text", id="lastName", placeholder="Last Name", required)
+      label(for="email") Enter email:
       input(type="email", id="email", placeholder="Email", required)
+      label(for="password") Enter password:
       input(type="password", id="password", placeholder="Password", required)
+      label(for="confirmPassword") Enter password again:
       input(type="password", id="confirmPassword", placeholder="Repeat Password", required)
       p#errorMessage.error
       .button-group
-        button(type="submit", id="logreg-button") Register
-        button(type="button", id="logreg-button", onclick="window.location.href = '/login';") Login
+        button(type="submit", id="submit-button") Register
+        a(href="/login") Login
 
   script.
     document.getElementById("registerForm").addEventListener("submit", function(event) {
