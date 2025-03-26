@@ -6,7 +6,10 @@ block append vars
 
 block main
   main.main-logreg
-    h2 Register
+    div.home-link
+      div: a(href="/") ⬅
+      h2 Register
+      div
     form#registerForm
       label(for="firstName") Enter first name:
       input(type="text", id="firstName", placeholder="First Name", required)
