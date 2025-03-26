@@ -14,7 +14,7 @@ html(lang="en")
     each style in styles ? styles : []
       link(rel="stylesheet" href=`../stylesheets/${style}.css`)
     each script in scripts ? scripts : []
-      link(rel="stylesheet" href=`../javascripts/${script}.js`)
+      script(src=`../javascripts/${script}.js`)
 
     block head
   block body

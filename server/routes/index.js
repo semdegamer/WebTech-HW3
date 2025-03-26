@@ -3,7 +3,7 @@ var router = express.Router();
 
 var nav = ["messages", "courses"];
 
-/* GET Messages Page */
+/* GET Messages Page if no page is specified */
 router.get('/', function(req, res) {
   res.redirect('/messages');
 });
