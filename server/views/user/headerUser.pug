@@ -1,0 +1,10 @@
+extends ../header
+
+block navItems
+  +navItem("messages", "/user/messages", "Messages")
+  +navItem("courses", "/user/courses", "Courses")
+
+block headerBody
+  div.profile-picture
+    a(href="/user/profile")
+      img(src="../images/blank-profile.jpg" alt="My Profile Picture")

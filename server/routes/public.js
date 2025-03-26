@@ -3,7 +3,13 @@ var router = express.Router();
 
 /* GET Home Page */
 router.get('/', function(req, res) {
-  res.render('public/home');
+  // req.locals.user.id === 'undefined'
+  
+  var loggedIn = false;
+  if (loggedIn)
+    res.render('public/home');
+  else
+    res.render('user/home');
 });
 
 module.exports = router;

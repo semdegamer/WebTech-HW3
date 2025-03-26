@@ -21,7 +21,7 @@ block main
       p#errorMessage.error
       .button-group
         button(type="submit", id="submit-button") Register
-        a(href="/login") Login
+        a(href="/auth/login") Login
 
   script.
     document.getElementById("registerForm").addEventListener("submit", function(event) {
