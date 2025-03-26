@@ -14,7 +14,7 @@ block main
           img(src="../images/blank-profile.jpg" alt="Avatar" class="avatar-img")
         
         // Button to change the avatar
-        button.change-avatar-btn(type="button" onclick="changeAvatar()") Change Avatar
+        button.profile-btn(type="button" onclick="changeAvatar()") Change Avatar
         
         // Name 
         h2.profile-name Emma Bout   
@@ -22,3 +22,20 @@ block main
         h2.profile-friend Friend Requests
       .profile-box 
         h2.profile-edit Edit Profile
+        form.profile-form
+          // First Name, Last Name, Age Fields
+          .input-group
+            input(type="text" name="first-name" value="Emma")
+            input(type="text" name="last-name" value="Bout")
+            input(type="number" name="age" value="21")
+
+          // Email Field (Longer)
+          .input-group.email
+            input(type="email" name="email" value="emma.bout@example.com")
+
+          // Hobbies Field (Longer)
+          .input-group.hobbies
+            input(type="text" name="hobbies" value="Reading, Hiking, Gaming")
+
+          // Save Button
+          button.profile-btn(type="button" onclick="enableEditing()") Save Profile
