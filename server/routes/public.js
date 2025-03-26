@@ -7,9 +7,9 @@ router.get('/', function(req, res) {
   
   var loggedIn = false;
   if (loggedIn)
-    res.render('public/home');
-  else
     res.render('user/home');
+  else
+    res.render('public/home');
 });
 
 module.exports = router;
