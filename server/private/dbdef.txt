@@ -101,3 +101,11 @@ CREATE TABLE ChatSeen (
   FOREIGN KEY(studentId_receiver) REFERENCES Student(studentId),
   FOREIGN KEY(messageId) REFERENCES Message(messageId)
 );
+
+CREATE TABLE Session (
+    sessionId TEXT PRIMARY KEY,  
+    userId INTEGER,     
+    expiresAt INTEGER,   
+    createdAt INTEGER,
+    FOREIGN KEY (userId) REFERENCES Student(id)
+);

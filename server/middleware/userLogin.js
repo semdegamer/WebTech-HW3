@@ -1,8 +1,11 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt'); // Library for hashing passwords securely
+const crypto = require('crypto'); // Library for generating secure random session tokens
+const dayjs = require('dayjs'); // Library for handling date and time operations
 
 const sqlite3 = require("sqlite3").verbose(); // verbose for better error logging
 const dbPath = __dirname + "/sqlite.db";
 const db = new sqlite3.Database(":memory:"); // for now in memory for easy testing
+
 const execute = (db, sql) => {
   return new Promise((resolve, reject) => {
     db.exec(sql, (err) => {
@@ -11,6 +14,7 @@ const execute = (db, sql) => {
     });
   });
 };
+
 const fs = require("fs/promises");
 
 const runSql = (db, sql, params = []) => new Promise((res, rej) => {
@@ -21,6 +25,7 @@ const runSql = (db, sql, params = []) => new Promise((res, rej) => {
       res();
   });
 });
+
 const getSql = (db, sql, params = []) => new Promise((res, rej) => {
   db.get(sql, params, (err, result) => {
     if (err)
@@ -30,6 +35,7 @@ const getSql = (db, sql, params = []) => new Promise((res, rej) => {
   });
 });
 
+// Initialize database and create necessary tables
 fs.readFile("private/dbdef.txt"
 ).then((sql) => execute(db, sql.toString())
 ).then(() => bcrypt.hash("a", 10)
@@ -38,8 +44,9 @@ fs.readFile("private/dbdef.txt"
 ).catch((err) => console.error(err));
 
 function userLogin(req, res) {
-  var data = req.body;
+  var data = req.body; // Get user login details from request
 
+  // Check if the email exists in the database
   getSql(db, "SELECT * FROM Student WHERE email = ?;", [data.email]
   ).then((row) => {
     if (!row)
@@ -60,23 +67,44 @@ function userLogin(req, res) {
       message: "an internal error occured, try again later."
     }));
   }
+
   function wrongEmail() {
     res.send(JSON.stringify({
       success: false,
       message: "email address not found, register first."
     }));
   }
+
   function wrongPassword() {
     res.send(JSON.stringify({
       success: false,
       message: "incorrect password, please try again."
     }));
   }
+
+  // Student is being logged in
   function success(student) {
-    // do stuff here to have student be logged in
-    res.send(JSON.stringify({
-      success: true
-    }));
+    // Generate a secure session token
+    const sessionId = crypto.randomBytes(32).toString('hex');
+
+    // Set session expiration (1 hour from now)
+    const expiresAt = dayjs().add(1, 'hour').unix();
+    const createdAt = dayjs().unix(); // Current time (session creation time)
+
+    // Store the session in the database
+    runSql(db, "INSERT INTO Sessions(sessionId, studentId, expiresAt, createdAt) VALUES (?, ?, ?, ?);", 
+      [sessionId, student.id, expiresAt, createdAt]
+    ).then(() => {
+      // Send session token to the client
+      res.cookie("sessionId", sessionId, { 
+        httpOnly: true, 
+        secure: true, 
+        maxAge: 3600000 }); // Cookie expires in 1 hour
+      res.send(JSON.stringify({
+        success: true,
+        message: "Login successful!"
+      }));
+    }).catch(errorInternal);
   }
 }
 
