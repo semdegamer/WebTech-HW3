@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var bcrypt = require('bcrypt');
+//var helmet = require('helmet'); // security headers
 
 var publicRouter = require('./routes/public');
 var authRouter = require('./routes/auth');
@@ -15,6 +17,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
+//app.use(helmet());
+//app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
