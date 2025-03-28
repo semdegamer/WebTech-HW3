@@ -1,2 +1,7 @@
 main
   h1 Welcome to this site!
+  script.
+    let events = new EventSource(`/events`);
+    events.onmessage = (event) => {
+      alert(JSON.parse(event.data));
+    };

@@ -104,8 +104,8 @@ CREATE TABLE ChatSeen (
 
 CREATE TABLE Session (
     sessionId TEXT PRIMARY KEY,  
-    userId INTEGER,     
+    studentId INTEGER,     
     expiresAt INTEGER,   
     createdAt INTEGER,
-    FOREIGN KEY (userId) REFERENCES Student(id)
+    FOREIGN KEY (studentId) REFERENCES Student(studentId)
 );

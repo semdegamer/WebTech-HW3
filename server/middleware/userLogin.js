@@ -53,6 +53,7 @@ function userLogin(req, res) {
       wrongEmail();
     else
       bcrypt.compare(data.password, row.password).then((result) => {
+        console.log(JSON.stringify(row));
         if (result)
           success(row);
         else
@@ -92,8 +93,8 @@ function userLogin(req, res) {
     const createdAt = dayjs().unix(); // Current time (session creation time)
 
     // Store the session in the database
-    runSql(db, "INSERT INTO Sessions(sessionId, studentId, expiresAt, createdAt) VALUES (?, ?, ?, ?);", 
-      [sessionId, student.id, expiresAt, createdAt]
+    runSql(db, "INSERT INTO Session(sessionId, studentId, expiresAt, createdAt) VALUES (?, ?, ?, ?);", 
+      [sessionId, student.studentId, expiresAt, createdAt]
     ).then(() => {
       // Send session token to the client
       res.cookie("sessionId", sessionId, { 
@@ -101,8 +102,7 @@ function userLogin(req, res) {
         secure: true, 
         maxAge: 3600000 }); // Cookie expires in 1 hour
       res.send(JSON.stringify({
-        success: true,
-        message: "Login successful!"
+        success: true
       }));
     }).catch(errorInternal);
   }

@@ -5,7 +5,22 @@ block append vars
   - styles.push("user/messages")
   - var navSelected = "messages"
 
+include messageMixin
+
 block main
   main.main-messages
-    h1 Messages
-    h2 hoi
+    div
+      section.friends
+
+      section.chatbox
+        .chatbox__container
+          - for (let i = 0; i < 50; i++)
+            +message("person nosrep", "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", "12:34", false)
+            +message("person nosrep", "Lorem Ipsum is simply dummy text of", "12:34", true)
+            +message("person nosrep", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.", "12:34", true)
+        
+        form#message-form.chatbox__message-form(method = "post")
+          input#message-box(type="text", placeholder="type message...")
+          input(type="submit", value="➤ Send")
+        
+        script(src="/javascripts/chatbox.js")
