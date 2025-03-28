@@ -9,7 +9,7 @@ block main
     div.home-link
       a(href="/") ⬅home
       h2 Register
-      div
+      div  
     form#registerForm
       label(for="firstName") Enter first name:
       input(type="text", id="firstName", placeholder="First Name", required)
@@ -27,15 +27,49 @@ block main
         a(href="/auth/login") Login
 
   script.
-    document.getElementById("registerForm").addEventListener("submit", function(event) {
+    // Wait until the form is submitted
+    document.getElementById("registerForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      // Get user input values from form fields
+      let firstName = document.getElementById("firstName").value;
+      let lastName = document.getElementById("lastName").value;
+      let email = document.getElementById("email").value;
       let password = document.getElementById("password").value;
       let confirmPassword = document.getElementById("confirmPassword").value;
       let errorMessage = document.getElementById("errorMessage");
-      
+
+      // Check if passwords match
       if (password !== confirmPassword) {
-        event.preventDefault();
         errorMessage.textContent = "Passwords do not match!";
-      } else {
-        errorMessage.textContent = "";
+        return;
+      }
+
+      errorMessage.textContent = ""; // Clear previous error messages
+
+      try {
+        // Send registration data to the server using Fetch API
+        let response = await fetch('/auth/register', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ firstName, lastName, email, password }) // Convert data to JSON format
+        });
+
+        let result = await response.json(); // Parse response from server
+
+        if (result.success) {
+          // If registration is successful, redirect to login page
+          window.location.href = "/auth/login";
+        } else {
+          // Display error message from the server
+          errorMessage.textContent = result.message;
+        }
+      } catch (err) {
+        // Handle network or server errors
+        errorMessage.textContent = "An error occurred. Please try again later.";
+        console.error(err);
       }
     });

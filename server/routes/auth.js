@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var userLogin = require('../middleware/userLogin');
+var userRegistration = require('../middleware/userRegistration');
 
 router.use(function(req, res, next) {
   var loggedIn = false;
@@ -23,5 +24,7 @@ router.post('/login', userLogin);
 router.get('/register', function(req, res) {
   res.render('auth/register');
 });
+
+router.post('/register', userRegistration);
 
 module.exports = router;
