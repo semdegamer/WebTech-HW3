@@ -3,8 +3,11 @@ const fs = require("fs");
 const fsPromises = require("fs/promises");
 const bcrypt = require('bcrypt'); // Library for hashing passwords securely
 
+// the db variable, no value yet because for now the db first needs to be deleted, which is asynchronous
+var dbpath = "private/my.db";
 var db;
 
+// fills the db with the tables and some dummy data.
 const filldb = () => {
   // Initialize database and create necessary tables synchronously
   db = new sqlite3.Database(dbpath);
@@ -16,7 +19,7 @@ const filldb = () => {
   .then(() => console.log("db made"));
 }
 
-const dbpath = "private/my.db";
+// deletes the db if it exists, and then calls fillDb
 if (fs.existsSync(dbpath)) {
   fsPromises.unlink(dbpath)
   .then(() => filldb())
@@ -26,6 +29,7 @@ if (fs.existsSync(dbpath)) {
   .catch((err) => console.log(err));
 }
 
+// for simply executing a sql queries without params
 const execute = async (sql, localDb) => {
   if (!localDb)
     localDb = db;
@@ -37,6 +41,7 @@ const execute = async (sql, localDb) => {
   });
 };
 
+// for executing a single sql query with params and no result
 const runSql = (sql, params = [], localDb) => new Promise((res, rej) => {
   if (!localDb)
     localDb = db;
@@ -48,6 +53,7 @@ const runSql = (sql, params = [], localDb) => new Promise((res, rej) => {
   });
 });
 
+// for executing a single sql query with params and returns the result
 const getSql = (sql, params = [], localDb) => new Promise((res, rej) => {
   if (!localDb)
     localDb = db;
@@ -59,6 +65,7 @@ const getSql = (sql, params = [], localDb) => new Promise((res, rej) => {
   });
 });
 
+// the module function that adds the usefull db functions and the db itself to the req object, for easy access by other middleware
 function dbHelper(req, res, next) {
   req.db = {
     get: db,
