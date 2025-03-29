@@ -6,6 +6,8 @@ var logger = require('morgan');
 var bcrypt = require('bcrypt');
 //var helmet = require('helmet'); // security headers
 
+var dbhelper = require('./middleware/databaseHelper');
+
 var publicRouter = require('./routes/public');
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
@@ -23,6 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(dbhelper);
 
 app.use('/', publicRouter);
 app.use('/auth', authRouter);
