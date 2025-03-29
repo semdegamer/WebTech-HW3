@@ -51,6 +51,8 @@ router.get('/messages/:chat', userChats.getMessageChat);
 
 router.post('/messages/:chat', userChats.postMessageChat);
 
+router.get('/messages/:chat/events', userChats.eventMessageChat);
+
 /* GET Courses Page */
 router.get('/courses', function(req, res) {
   res.render('user/courses');
@@ -67,6 +69,10 @@ module.exports = router;
 // for testing only, do not use this.
 var testDb;
 function testCase(req, res, next) {
+  req.user = {
+    loggedIn: true,
+    Id: parseInt(req.query.name[3])
+  }
   const addUser = (fname, lname, email, password) => {
     return runSql(testDb, "INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", [fname, lname, email, password]);
   };

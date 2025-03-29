@@ -13,7 +13,7 @@ form.addEventListener("submit", (event) => {
     fetch('', {
       method: 'POST',
       headers: {
-        'Accept': 'text/html',
+        'Accept': 'text/plain',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({content: message})
@@ -27,8 +27,24 @@ form.addEventListener("submit", (event) => {
         messageBox.value = '';
         message.scrollIntoView();
     }).catch(err => {
-      alert(JSON.stringify(err));
+      //alert("1");
+      //alert(JSON.stringify(err));
+      console.log(err);
     });
 });
 
-
+if (true || window.location.pathname == "/user/messages/1" && window.location.search == "?name=sem2"){
+  const eventSource = new EventSource(window.location.pathname + "/events" + window.location.search);
+  eventSource.onmessage = (event) => {
+    let data = JSON.parse(event.data);
+    console.log(data.message);
+    // dummy div
+    var div = document.createElement('div');
+    div.innerHTML = data.message;
+    var message = div.firstElementChild;
+    messageCon.prepend(message);
+  };
+  eventSource.onerror = (err) => {
+    console.log(err);
+  };
+}
