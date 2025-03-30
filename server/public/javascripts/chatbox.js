@@ -19,13 +19,7 @@ form.addEventListener("submit", (event) => {
       body: JSON.stringify({content: message})
     }).then(res => res.text())
       .then(res => {
-        // dummy div
-        var div = document.createElement('div');
-        div.innerHTML = res;
-        var message = div.firstElementChild;
-        messageCon.prepend(message);
         messageBox.value = '';
-        message.scrollIntoView();
     }).catch(err => {
       //alert("1");
       //alert(JSON.stringify(err));
@@ -37,12 +31,16 @@ if (true || window.location.pathname == "/user/messages/1" && window.location.se
   const eventSource = new EventSource(window.location.pathname + "/events" + window.location.search);
   eventSource.onmessage = (event) => {
     let data = JSON.parse(event.data);
-    console.log(data.message);
     // dummy div
     var div = document.createElement('div');
     div.innerHTML = data.message;
     var message = div.firstElementChild;
     messageCon.prepend(message);
+
+    // focus is true when it is your own message, so that you directly focus on your own message.
+    if (data.focus) {
+      message.scrollIntoView();
+    }
   };
   eventSource.onerror = (err) => {
     console.log(err);
