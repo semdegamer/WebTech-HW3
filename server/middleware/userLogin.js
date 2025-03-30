@@ -21,30 +21,33 @@ function userLogin(req, res) {
 
   function errorInternal(err) {
     console.log(err);
-    res.send(JSON.stringify({
+    res.json({
       success: false,
       message: "an internal error occured, try again later."
-    }));
+    });
   }
 
   function wrongEmail() {
-    res.send(JSON.stringify({
+    res.json({
       success: false,
       message: "email address not found, register first."
-    }));
+    });
   }
 
   function wrongPassword() {
-    res.send(JSON.stringify({
+    res.json({
       success: false,
       message: "incorrect password, please try again."
-    }));
+    });
   }
 
   // Student is being logged in
   function success(student) {
     createSession(req.db, student, res).then(() => {
-        res.json({ success: true, message: "Login successful!" });
+      res.json({
+        success: true,
+        message: "Login successful!"
+      });
     }).catch(errorInternal);
   }
 }
