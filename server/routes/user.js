@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.use(function (req, res, next) {
   // for testing
+  // TODO: remove later
   if (req.query.name.startsWith('sem')) {
     testCase(req, res, next);
 
@@ -60,7 +61,7 @@ function testCase(req, res, next) {
     Id: parseInt(req.query.name[3])
   }
   const addUser = (fname, lname, email, password) => {
-    return runSql(testDb, "INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", [fname, lname, email, password]);
+    return req.db.runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", [fname, lname, email, password]);
   };
 
   req.session = {
@@ -98,11 +99,6 @@ function testCase(req, res, next) {
   });
 
   const act1 = () => {
-    req.db = {
-      get: testDb,
-      runSql: runSql,
-      getSql: getSql
-    };
     next();
   };
   
@@ -111,15 +107,14 @@ function testCase(req, res, next) {
     
     // Initialize database and create necessary tables
     fs.readFile("private/dbdef.txt"
-    ).then((sql) => execute(testDb, sql.toString())
     ).then(() => addUser("p1", "1", "e1", "1")
     ).then(() => addUser("p2", "2", "e2", "2")
-    ).then(() => runSql(testDb, "INSERT INTO Friendship(date) VALUES(?);", [dayjs().format('YYYY/MM/DD')])
-    ).then(() => runSql(testDb, "INSERT INTO Friend(friendshipId, studentId) VALUES(?, ?);", [1, 1])
-    ).then(() => runSql(testDb, "INSERT INTO Friend(friendshipId, studentId) VALUES(?, ?);", [1, 2])
-    ).then(() => runSql(testDb, "INSERT INTO Chat(creationDate) VALUES(?);", [dayjs().format('YYYY/MM/DD')])
-    ).then(() => runSql(testDb, "INSERT INTO ChatParticipent(chatId, studentId) VALUES(?, ?);", [1, 1])
-    ).then(() => runSql(testDb, "INSERT INTO ChatParticipent(chatId, studentId) VALUES(?, ?);", [1, 2])
+    ).then(() => req.db.runSql("INSERT INTO Friendship(date) VALUES(?);", [dayjs().format('YYYY/MM/DD')])
+    ).then(() => req.db.runSql("INSERT INTO Friend(friendshipId, studentId) VALUES(?, ?);", [1, 1])
+    ).then(() => req.db.runSql("INSERT INTO Friend(friendshipId, studentId) VALUES(?, ?);", [1, 2])
+    ).then(() => req.db.runSql("INSERT INTO Chat(creationDate) VALUES(?);", [dayjs().format('YYYY/MM/DD')])
+    ).then(() => req.db.runSql("INSERT INTO ChatParticipent(chatId, studentId) VALUES(?, ?);", [1, 1])
+    ).then(() => req.db.runSql("INSERT INTO ChatParticipent(chatId, studentId) VALUES(?, ?);", [1, 2])
     ).then(() => act1());
   }
   else

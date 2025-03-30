@@ -59,22 +59,34 @@ function paramMessageChat(req, res, next, chat) {
 }
 
 function getMessageChat(req, res) {
-  res.render('user/messages');
+  req.db.allSql(
+    "SELECT studentId, concat(firstName, ' ', lastName) AS name, content, date, SUBSTR(Message.time, 1, 5) AS time " +
+    "FROM Message " +
+    "INNER JOIN Student " +
+    "ON Student.studentId = Message.studentId_sender " +
+    "WHERE Message.chatId = ? " +
+    "ORDER BY Message.date DESC, Message.time DESC;", [req.chatId])
+  .then((rows) => {
+    res.render('user/messages', { messages: rows, userId: req.user.Id});
+  })
 }
 
 function postMessageChat(req, res) {
   // create the message data.
-  var time = dayjs().format("HH:mm");
-  var message = {name: "sem", content: req.body.content, time: time};
+  var date = dayjs().format("YYYY-MM-DD");
+  var time = dayjs().format("HH:mm:ss:SSS");
+  var message = {name: "sem", content: req.body.content, date: date, time: time};
 
   // save the message in the db
+  req.db.runSql("INSERT INTO Message (chatId, studentId_sender, content, date, time) VALUES (?, ?, ?, ?, ?)", [req.chatId, req.user.Id, message.content, message.date, message.time])
+  .then(() => {
+    // send the chat to the other users
+    ChatManager.getChat(req.chatId).sendMessage(message, req.user.Id);
 
-  // send the chat to the other users
-  ChatManager.getChat(req.chatId).sendMessage(message, req.user.Id);
-
-  // return ok status without body and no caching
-  res.setHeader("Cache-Control", "max-age=0, no-cache, must-revalidate, proxy-revalidate");
-  res.sendStatus(204);
+    // return ok status without body and no caching
+    res.setHeader("Cache-Control", "max-age=0, no-cache, must-revalidate, proxy-revalidate");
+    res.sendStatus(204);
+  })
 }
 
 function eventMessageChat(req, res) {

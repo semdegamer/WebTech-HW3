@@ -84,8 +84,15 @@ main.main-messages>div {
   padding: 0 5px 5px 5px;
   background-color: var(--light-blue-color);
 }
+.chatbox__container>p {
+  font-size: 2rem;
+  margin:auto;
+  display: block;
+}
+
 .chatbox__message {
   max-width: 70%;
+  min-width: 15%;
   padding: 5px 10px;
   border-radius: 10px;
   margin-top: 5px;

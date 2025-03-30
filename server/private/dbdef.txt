@@ -82,6 +82,7 @@ CREATE TABLE Message (
   studentId_sender INTEGER NOT NULL,
   content VARCHAR NOT NULL,
   date DATE NOT NULL,
+  time TIME NOT NULL,
   FOREIGN KEY(chatId) REFERENCES Chat(chatId),
   FOREIGN KEY(studentId_sender) REFERENCES Student(studentId)
 );

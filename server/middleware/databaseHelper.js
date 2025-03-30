@@ -53,11 +53,23 @@ const runSql = (sql, params = [], localDb) => new Promise((res, rej) => {
   });
 });
 
-// for executing a single sql query with params and returns the result
+// for executing a single sql query with params and returns a single result
 const getSql = (sql, params = [], localDb) => new Promise((res, rej) => {
   if (!localDb)
     localDb = db;
   db.get(sql, params, function (err, result) {
+    if (err)
+      rej(err);
+    else
+      res(result, {lastID: this.lastID, changes: this.changes});
+  });
+});
+
+// for executing a single sql query with params and returns the results
+const allSql = (sql, params = [], localDb) => new Promise((res, rej) => {
+  if (!localDb)
+    localDb = db;
+  db.all(sql, params, function (err, result) {
     if (err)
       rej(err);
     else
@@ -70,7 +82,8 @@ function dbHelper(req, res, next) {
   req.db = {
     get: db,
     runSql: runSql,
-    getSql: getSql
+    getSql: getSql,
+    allSql: allSql
   };
   next();
 }

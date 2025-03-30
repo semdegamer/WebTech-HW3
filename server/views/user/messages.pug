@@ -14,10 +14,10 @@ block main
 
       section.chatbox
         .chatbox__container
-          - for (let i = 0; i < 6; i++)
-            +message("person nosrep", "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", "12:34", false)
-            +message("person nosrep", "Lorem Ipsum is simply dummy text of", "12:34", true)
-            +message("person nosrep", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.", "12:34", true)
+          each message in messages 
+            +message(message.name, message.content, message.time, message.studentId != userId)
+          else
+            p Send your first message!
         
         form#message-form.chatbox__message-form(method = "post", autocomplete="off")
           input#message-box(type="text", placeholder="type message...")
