@@ -112,7 +112,11 @@ function testCase(req, res, next) {
   });
 
   const act1 = () => {
-    req.testDb = testDb;
+    req.db = {
+      get: testDb,
+      runSql: runSql,
+      getSql: getSql
+    };
     next();
   };
   
