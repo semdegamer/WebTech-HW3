@@ -72,6 +72,7 @@ function dbHelper(req, res, next) {
     runSql: runSql,
     getSql: getSql
   };
+  next();
 }
 
 module.exports = dbHelper;
