@@ -1,8 +1,10 @@
 const express = require('express');
 const sessionMiddleware = require('../middleware/session');
+const userChats = require('../middleware/userChats');
+const sqlite3 = require("sqlite3").verbose(); // verbose for better error logging
+const dayjs = require('dayjs'); // Library for handling date and time operations
 
 const router = express.Router();
-const nav = ["messages", "courses"];
 
 router.use(function (req, res, next) {
   // for testing
