@@ -5,6 +5,11 @@ block append vars
 
 block chatbox
   section.chatbox
+    .chatbox__topbar
+      div: button.toggle-chats.default-button Show Chats
+      h1=chatName
+      div
+
     .chatbox__container
       each message in messages 
         +message(message.name, message.content, message.time, message.studentId != userId)
@@ -15,4 +20,4 @@ block chatbox
       input#message-box(type="text", placeholder="type message...")
       input.default-button(type="submit", value="➤ Send")
     
-    script(src=base + "javascripts/chatbox.js")
+    script(src=(base + "javascripts/chatbox.js"))

@@ -120,7 +120,16 @@ function getMessagePage(req, res) {
       return data;
     });
   }).then((data) => {
-    res.render('user/messages_chatbox', { messages: data.messages, friends: data.friends, chats: data.chats, userId: req.user.Id});
+    return req.db.getSql(`
+      SELECT name
+      FROM Chat
+      WHERE chatId = ?;`, [req.chatId])
+    .then(row => {
+      data.name = row.name;
+      return data;
+    });
+  }).then((data) => {
+    res.render('user/messages_chatbox', { messages: data.messages, friends: data.friends, chats: data.chats, userId: req.user.Id, chatName: data.name});
   }).catch(err => console.log(err))
 }
 

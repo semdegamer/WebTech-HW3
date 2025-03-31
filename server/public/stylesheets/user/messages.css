@@ -103,11 +103,6 @@ main.main-messages>div {
   background-color: var(--dark-blue-color);
 }
 
-@media only screen and (max-width: 600px) {
-  .chats {
-    display: none;
-  }
-}
 .chatbox__container {
   flex: 1 0 0;
   overflow: auto;
@@ -218,6 +213,7 @@ main.main-messages>div {
 }
 #create-chat-form {
   background-color: var(--light-blue-color);
+  width: 100%;
 }
 #create-chat-form>* {
   float: left;
@@ -253,4 +249,61 @@ main.main-messages>div {
 }
 #confirm-create-chat {
   margin-top: 5px;
+}
+
+
+
+
+
+.chatbox__topbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: center;
+
+  background-color: var(--light-blue-color);
+  padding-bottom: 5px;
+}
+.chatbox__topbar h1 {
+  flex: 0 0 0;
+  white-space: nowrap;
+}
+.chatbox__topbar div button {
+  font-size: 1rem;
+  white-space: nowrap;
+  float: left;
+  margin-left: 5px;
+}
+.chatbox__topbar div {
+  flex: 1 0 0;
+}
+
+.toggle-chats {
+  display: none;
+}
+
+.chats .chatbox__topbar {
+  display: none;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .chats {
+    display: none;
+  }
+  .toggle-chats {
+    display: none;
+  }
+  .toggle-chats {
+    display: block;
+  }
+  .chatbox>* {
+    padding-left: 0px;
+  }
+  .chats .chatbox__topbar {
+    display: block;
+  }
+  .chatbox__container {
+    padding-top: 5px;
+  }
 }

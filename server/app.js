@@ -21,7 +21,7 @@ app.locals.pretty = true;
 
 var fs = require('fs');
 var accessLogStream = fs.createWriteStream('./access.log', {flags: 'a'});
-app.use(logger("dev",{stream: accessLogStream}));
+app.use(logger("dev")); // ,{stream: accessLogStream}
 //app.use(helmet());
 //app.disable('x-powered-by');
 app.use(express.json());
