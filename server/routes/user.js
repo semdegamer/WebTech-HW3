@@ -19,27 +19,24 @@ router.use(function (req, res, next) {
 });
 
 /* GET Messages Page */
-router.get('/messages', function (req, res) {
-    if (!req.session || !req.session.user) {
-        return res.redirect('/auth/login');
-    }
-    res.render('user/messages', { nav, user: req.session.user });
-});
+router.get('/messages', userChats.getChatsPage);
+
+router.post('/messages', userChats.createChat);
 
 router.param('chat', userChats.paramMessageChat);
 
-router.get('/messages/:chat', userChats.getMessageChat);
+router.get('/messages/:chat', userChats.getMessagePage);
 
-router.post('/messages/:chat', userChats.postMessageChat);
+router.post('/messages/:chat', userChats.postMessage);
 
-router.get('/messages/:chat/events', userChats.eventMessageChat);
+router.get('/messages/:chat/events', userChats.messageStream);
 
 /* GET Courses Page */
 router.get('/courses', function (req, res) {
     if (!req.session || !req.session.user) {
         return res.redirect('/auth/login');
     }
-    res.render('user/courses', { nav, user: req.session.user });
+    res.render('user/courses', { user: req.session.user });
 });
 
 /* GET Profile Page */
@@ -47,7 +44,7 @@ router.get('/profile', function (req, res) {
     if (!req.session || !req.session.user) {
         return res.redirect('/auth/login');
     }
-    res.render('user/profile', { nav, user: req.session.user });
+    res.render('user/profile', { user: req.session.user });
 });
 
 module.exports = router;
@@ -112,7 +109,7 @@ function testCase(req, res, next) {
     ).then(() => req.db.runSql("INSERT INTO Friendship(date) VALUES(?);", [dayjs().format('YYYY/MM/DD')])
     ).then(() => req.db.runSql("INSERT INTO Friend(friendshipId, studentId) VALUES(?, ?);", [1, 1])
     ).then(() => req.db.runSql("INSERT INTO Friend(friendshipId, studentId) VALUES(?, ?);", [1, 2])
-    ).then(() => req.db.runSql("INSERT INTO Chat(creationDate) VALUES(?);", [dayjs().format('YYYY/MM/DD')])
+    ).then(() => req.db.runSql("INSERT INTO Chat(creationDate, name) VALUES(strftime('%Y-%m-%d','now'), ?);", ["the chat"])
     ).then(() => req.db.runSql("INSERT INTO ChatParticipent(chatId, studentId) VALUES(?, ?);", [1, 1])
     ).then(() => req.db.runSql("INSERT INTO ChatParticipent(chatId, studentId) VALUES(?, ?);", [1, 2])
     ).then(() => act1());

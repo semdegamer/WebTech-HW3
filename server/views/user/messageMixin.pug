@@ -1,5 +1,5 @@
 mixin message(name, content, time, left)
-  div.chatbox__message(class=left? "chatbox__message--left" : "chatbox__message--right")
+  div.chatbox__message(class=(left ? "chatbox__message--left" : "chatbox__message--right"))
     - if(left)
       p.chatbox__name=name
     p.chatbox__content=content

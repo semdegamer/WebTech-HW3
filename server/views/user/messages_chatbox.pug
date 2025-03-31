@@ -1,0 +1,15 @@
+extends messages 
+
+block chatbox
+  section.chatbox
+    .chatbox__container
+      each message in messages 
+        +message(message.name, message.content, message.time, message.studentId != userId)
+      else
+        p Send your first message!
+    
+    form#message-form.chatbox__message-form(method = "post", autocomplete="off")
+      input#message-box(type="text", placeholder="type message...")
+      input.default-button(type="submit", value="➤ Send")
+    
+    script(src="/javascripts/chatbox.js")

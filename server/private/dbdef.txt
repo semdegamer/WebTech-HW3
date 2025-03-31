@@ -73,7 +73,8 @@ CREATE TABLE FriendRequestSeen (
 CREATE TABLE Chat (
   chatId INTEGER PRIMARY KEY AUTOINCREMENT,
   creationDate DATE NOT NULL,
-  lastMessage DATE
+  name VARCHAR NOT NULL,
+  lastMessage DATETIME
 );
 
 CREATE TABLE Message (

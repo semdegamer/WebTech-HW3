@@ -6,6 +6,7 @@ block append vars
   - var navSelected = "messages"
 
 include messageMixin
+include chatMixin
 
 block main
   main.main-messages
@@ -13,6 +14,9 @@ block main
       section.chats
         .chats__container
           //- all chats
+          ul
+            each chat in chats
+              +chat(chat)
       
         .chats__create
           form#create-chat-form
@@ -20,12 +24,11 @@ block main
             input.chats__create__name(type="text", id="chatName")
             p Select chat members:
             ul.chats__members
-              - for (let i = 0; i < 10; i++)
-                - let itemId = "account" + i;
+              each friend in friends 
                 li
-                  label.default-button(for=itemId)
-                    input.chats__member(type="checkbox", id=itemId)
-                    p=itemId
+                  label.content-button(for="friend"+friend.studentId)
+                    input.chats__member(type="checkbox", id="friend"+friend.studentId, studentId=friend.studentId)
+                    p=friend.name
             hr
             input#confirm-create-chat.default-button(type="submit", value="Confirm")
 
@@ -34,15 +37,4 @@ block main
 
         script(src="/javascripts/createChat.js")
 
-      section.chatbox
-        .chatbox__container
-          each message in messages 
-            +message(message.name, message.content, message.time, message.studentId != userId)
-          else
-            p Send your first message!
-        
-        form#message-form.chatbox__message-form(method = "post", autocomplete="off")
-          input#message-box(type="text", placeholder="type message...")
-          input.default-button(type="submit", value="➤ Send")
-        
-        script(src="/javascripts/chatbox.js")
+      block chatbox

@@ -29,6 +29,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(dbhelper);
 
+app.use((req, res, next) => {
+  console.log("_1");
+  next();
+});
+
 app.use('/', publicRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
