@@ -27,7 +27,8 @@ form.addEventListener("submit", (event) => {
 });
 
 if (true || window.location.pathname == "/user/messages/1" && window.location.search == "?name=sem2"){
-  const eventSource = new EventSource("events" + window.location.search);
+  const pathnameParts = window.location.pathname.split('/');
+  const eventSource = new EventSource(pathnameParts[pathnameParts.length-1] + "/events" + window.location.search);
   eventSource.onmessage = (event) => {
     let data = JSON.parse(event.data);
     // dummy div

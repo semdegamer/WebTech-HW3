@@ -2,6 +2,8 @@ block vars
   - var styles = []
   - var scripts = []
 
+- var base = "./" + "../".repeat(Math.max(0, pathDepth - 1));
+
 doctype html
 html(lang="en")
   head
@@ -10,11 +12,12 @@ html(lang="en")
     meta(name="description", content="A website with a social network, message with your friends.")
     title=title
 
-    link(rel="stylesheet" href="/stylesheets/styles.css")
+    link(rel="stylesheet", href=base + "stylesheets/styles.css")
+    link(rel="stylesheet", href=base + "stylesheets/styles.css")
     each style in styles ? styles : []
-      link(rel="stylesheet" href=`/stylesheets/${style}.css`)
+      link(rel="stylesheet", href=base + `stylesheets/${style}.css`)
     each script in scripts ? scripts : []
-      script(src=`/javascripts/${script}.js`)
+      script(src=base + `javascripts/${script}.js`)
 
     block head
   block body

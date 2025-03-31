@@ -19,7 +19,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.locals.pretty = true;
 
-app.use(logger('dev'));
+var fs = require('fs');
+var accessLogStream = fs.createWriteStream('./access.log', {flags: 'a'});
+app.use(logger("dev",{stream: accessLogStream}));
 //app.use(helmet());
 //app.disable('x-powered-by');
 app.use(express.json());

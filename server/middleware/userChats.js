@@ -127,21 +127,28 @@ function getMessagePage(req, res) {
 function postMessage(req, res) {
   // create the message data.
   var date = dayjs().format("YYYY-MM-DD");
-  var time = dayjs().format("HH:mm:ss:SSS");
+  var exactTime = dayjs().format("HH:mm:ss:SSS");
   if (!req.body.content || req.body.content.length == 0) throw new Error("incorrect message");
-  var message = {name: "sem", content: req.body.content, date: date, time: time};
 
-  // because we render messages with pug, there is no need to escape symbols in the content of the message
-  // save the message in the db
-  req.db.runSql("INSERT INTO Message (chatId, studentId_sender, content, date, time) VALUES (?, ?, ?, ?, ?)", [req.chatId, req.user.Id, message.content, message.date, message.time])
-  .then(() => {
-    // send the chat to the other users
-    ChatManager.getChat(req.chatId).sendMessage(message, req.user.Id);
-
-    // return ok status without body and no caching
-    res.setHeader("Cache-Control", "max-age=0, no-cache, must-revalidate, proxy-revalidate");
-    res.sendStatus(204);
-  })
+  req.db.getSql(`
+    SELECT concat(firstName, ' ', lastName) AS name
+    FROM Student
+    WHERE studentId = ?;`, [req.user.Id])
+  .then((row) => {
+    var message = {name: row.name, content: req.body.content, date: date, time: exactTime.substring(0, 5)};
+    
+    // because we render messages with pug, there is no need to escape symbols in the content of the message
+    // save the message in the db
+    return req.db.runSql("INSERT INTO Message (chatId, studentId_sender, content, date, time) VALUES (?, ?, ?, ?, ?)", [req.chatId, req.user.Id, message.content, message.date, exactTime])
+    .then(() => {
+      // send the chat to the other users
+      ChatManager.getChat(req.chatId).sendMessage(message, req.user.Id);
+  
+      // return ok status without body and no caching
+      res.setHeader("Cache-Control", "max-age=0, no-cache, must-revalidate, proxy-revalidate");
+      res.sendStatus(204);
+    });
+  }).catch(err => console.log(err));
 }
 
 function createChat(req, res) {
