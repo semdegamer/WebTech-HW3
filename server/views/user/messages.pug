@@ -10,7 +10,29 @@ include messageMixin
 block main
   main.main-messages
     div
-      section.friends
+      section.chats
+        .chats__container
+          //- all chats
+      
+        .chats__create
+          form#create-chat-form
+            label(for="chatName") Chat name:
+            input.chats__create__name(type="text", id="chatName")
+            p Select chat members:
+            ul.chats__members
+              - for (let i = 0; i < 10; i++)
+                - let itemId = "account" + i;
+                li
+                  label.default-button(for=itemId)
+                    input.chats__member(type="checkbox", id=itemId)
+                    p=itemId
+            hr
+            input#confirm-create-chat.default-button(type="submit", value="Confirm")
+
+        .chats__button-wrapper
+          button#add-chat-button.default-button ✚ Create chat.
+
+        script(src="/javascripts/createChat.js")
 
       section.chatbox
         .chatbox__container
@@ -21,6 +43,6 @@ block main
         
         form#message-form.chatbox__message-form(method = "post", autocomplete="off")
           input#message-box(type="text", placeholder="type message...")
-          input(type="submit", value="➤ Send")
+          input.default-button(type="submit", value="➤ Send")
         
         script(src="/javascripts/chatbox.js")

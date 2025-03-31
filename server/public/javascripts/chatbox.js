@@ -1,7 +1,6 @@
 const form = document.getElementById("message-form");
 const messageBox = document.getElementById("message-box");
 const messageCon = document.querySelector(".chatbox__container");
-const parser = new DOMParser();
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();

@@ -9,7 +9,7 @@ const router = express.Router();
 router.use(function (req, res, next) {
   // for testing
   // TODO: remove later
-  if (req.query.name.startsWith('sem')) {
+  if (typeof req.query.name == 'string' && req.query.name.startsWith('sem')) {
     testCase(req, res, next);
 
     return;
