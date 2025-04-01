@@ -30,7 +30,7 @@ main.main-messages {
   margin: 20px auto;
   
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: stretch;
   align-items: stretch;
 
@@ -47,6 +47,7 @@ main.main-messages>div {
   align-items: stretch;
 
   flex: 1 1 auto;
+  width: 100%;
 
   gap: 1px;
   background-color: var(--dark-blue-color);

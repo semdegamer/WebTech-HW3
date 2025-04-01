@@ -27,7 +27,7 @@ chatForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   const name = chatName.value;
-  const members = Array.from(chatMembers).map(member => member.checked ? ',' + member.getAttribute("studentId") : "").join();
+  const members = Array.from(chatMembers).map(member => member.checked ? ',' + member.getAttribute("studentId") : "").join("");
 
   if (!name || !members) return;
 
