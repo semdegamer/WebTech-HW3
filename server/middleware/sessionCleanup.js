@@ -3,7 +3,7 @@ const dayjs = require('dayjs');
 module.exports = function cleanupSessions(db) {
     const currentTime = dayjs().unix();
 
-    db.runSql("DELETE FROM Sessions WHERE expiresAt < ?;", [currentTime])
+    db.runSql("DELETE FROM Session WHERE expiresAt < ?;", [currentTime])
         .then(() => console.log("Expired sessions cleaned up successfully"))
         .catch(err => console.error("Error cleaning up expired sessions:", err));
 };

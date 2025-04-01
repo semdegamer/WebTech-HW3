@@ -10,7 +10,7 @@ module.exports = function sessionMiddleware(req, res, next) {
         return res.redirect('/auth/login'); 
     }
 
-    req.db.getSql("SELECT studentId, expiresAt FROM Sessions WHERE sessionId = ?", [sessionId])
+    req.db.getSql("SELECT studentId, expiresAt FROM Session WHERE sessionId = ?", [sessionId])
         .then((session) => {
             if (!session || session.expiresAt < dayjs().unix()) {
                 res.clearCookie('sessionId');
@@ -44,7 +44,7 @@ module.exports.createSession = function (db, student, res) {
     const expiresAt = dayjs().add(1, 'hour').unix();
     const createdAt = dayjs().unix();
 
-    return db.runSql("INSERT INTO Sessions(sessionId, studentId, expiresAt, createdAt) VALUES (?, ?, ?, ?);",
+    return db.runSql("INSERT INTO Session(sessionId, studentId, expiresAt, createdAt) VALUES (?, ?, ?, ?);",
         [sessionId, student.id, expiresAt, createdAt]
     ).then(() => {
         res.cookie("sessionId", sessionId, {
