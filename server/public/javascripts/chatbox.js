@@ -26,23 +26,31 @@ form.addEventListener("submit", (event) => {
     });
 });
 
-if (true || window.location.pathname == "/user/messages/1" && window.location.search == "?name=sem2"){
-  const pathnameParts = window.location.pathname.split('/');
-  const eventSource = new EventSource(pathnameParts[pathnameParts.length-1] + "/events" + window.location.search);
-  eventSource.onmessage = (event) => {
-    let data = JSON.parse(event.data);
-    // dummy div
-    var div = document.createElement('div');
-    div.innerHTML = data.message;
-    var message = div.firstElementChild;
-    messageCon.prepend(message);
+var removedFiller = false;
+const pathnameParts = window.location.pathname.split('/');
+const eventSource = new EventSource(pathnameParts[pathnameParts.length-1] + "/events" + window.location.search);
+eventSource.onmessage = (event) => {
+  if (!removedFiller){
+    removedFiller = true;
 
-    // focus is true when it is your own message, so that you directly focus on your own message.
-    if (data.focus) {
-      message.scrollIntoView();
+    if (!messageCon.querySelector(".chatbox__message")){
+      // clear filler text when the first message is received
+      messageCon.innerHTML = '';
     }
-  };
-  eventSource.onerror = (err) => {
-    console.log(err);
-  };
-}
+  }
+
+  let data = JSON.parse(event.data);
+  // dummy div
+  var div = document.createElement('div');
+  div.innerHTML = data.message;
+  var message = div.firstElementChild;
+  messageCon.prepend(message);
+
+  // focus is true when it is your own message, so that you directly focus on your own message.
+  if (data.focus) {
+    message.scrollIntoView();
+  }
+};
+eventSource.onerror = (err) => {
+  console.log(err);
+};
