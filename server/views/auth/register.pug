@@ -5,6 +5,7 @@ block append vars
   - styles.push("auth/logreg")
   - var pathDepth = 2;
 
+//- Enforce input type on text fields (email for example follows example@example.com (input type= email))
 block main
   main.main-logreg
     div.home-link
@@ -14,10 +15,10 @@ block main
     form#registerForm
       label(for="firstName") Enter first name:
       input(type="text", id="firstName", placeholder="First Name", required)
-      label(for="lastName") Enter Last name:
+      label(for="lastName") Enter last name:
       input(type="text", id="lastName", placeholder="Last Name", required)
       label(for="email") Enter email:
-      input(type="email", id="email", placeholder="Email", required)
+      input(type="email", id="email", placeholder="Email", required) 
       label(for="password") Enter password:
       input(type="password", id="password", placeholder="Password", required)
       label(for="confirmPassword") Enter password again:
@@ -33,12 +34,25 @@ block main
       event.preventDefault();
 
       // Get user input values from form fields
-      let firstName = document.getElementById("firstName").value;
-      let lastName = document.getElementById("lastName").value;
-      let email = document.getElementById("email").value;
+      let firstName = document.getElementById("firstName").value.trim();
+      let lastName = document.getElementById("lastName").value.trim();
+      let email = document.getElementById("email").value.trim();
       let password = document.getElementById("password").value;
       let confirmPassword = document.getElementById("confirmPassword").value;
       let errorMessage = document.getElementById("errorMessage");
+      let submitButton = document.getElementById("submit-button");
+
+      errorMessage.textContent = ""; // Clear previous error messages
+
+      // Validate names (only letters allowed)
+      function validateName(name) {
+        return /^[a-zA-Z]+$/.test(name);
+      }
+
+      if (!validateName(firstName) || !validateName(lastName)) {
+        errorMessage.textContent = "Names can only contain letters!";
+        return;
+      }
 
       // Check if passwords match
       if (password !== confirmPassword) {
@@ -46,31 +60,29 @@ block main
         return;
       }
 
-      errorMessage.textContent = ""; // Clear previous error messages
+      submitButton.disabled = true; // Prevent duplicate submissions
 
       try {
-        // Send registration data to the server using Fetch API
         let response = await fetch('/auth/register', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ firstName, lastName, email, password }) // Convert data to JSON format
+          body: JSON.stringify({ firstName, lastName, email, password })
         });
 
-        let result = await response.json(); // Parse response from server
+        let result = await response.json();
 
         if (result.success) {
-          // If registration is successful, redirect to login page
-          window.location.href = "/auth/login";
+          window.location.href = "/"; // Redirect to home page on succes
         } else {
-          // Display error message from the server
           errorMessage.textContent = result.message;
         }
       } catch (err) {
-        // Handle network or server errors
         errorMessage.textContent = "An error occurred. Please try again later.";
         console.error(err);
       }
+
+      submitButton.disabled = false; // Re-enable button after request
     });

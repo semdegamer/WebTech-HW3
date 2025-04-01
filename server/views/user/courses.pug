@@ -7,5 +7,17 @@ block append vars
   - var pathDepth = 2;
 
 block main
-  main.main-courses
-    h1 Courses
+  header
+    a(href="/") Home
+    img.profile-pic(src="/path/to/profile-pic.jpg" alt="Profile" onclick="goToProfile()")
+  
+  main.course-list
+    each course in courses
+      a.course-item(href="/courses/" + course.id)
+        h3= course.name
+        p= course.description
+
+script.
+  function goToProfile() {
+    window.location.href = '/profile';
+  }

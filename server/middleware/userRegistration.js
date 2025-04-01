@@ -1,36 +1,58 @@
 const bcrypt = require('bcrypt');
+const { createSession } = require('../middleware/session');
 
-function userRegistration(req, res) {
-  const data = req.body;
+function userRegister(req, res) {
+  const { firstName, lastName, email, password } = req.body;
 
   // Validate input fields
-  if (!data.firstName || !data.lastName || !data.email || !data.password) {
-    return res.send(JSON.stringify({ success: false, message: "All fields are required!" }));
+  if (!firstName || !lastName || !email || !password) {
+    return res.json({ success: false, message: "All fields are required!" });
   }
 
-  // Check if the email already exists
-  req.db.getSql("SELECT * FROM Student WHERE email = ?;", [data.email])
+  // Check if the email already exists in the database
+  req.db.getSql("SELECT * FROM Student WHERE email = ?;", [email])
     .then((row) => {
       if (row) {
-        return res.send(JSON.stringify({ success: false, message: "Email is already registered!" }));
+        return res.json({ success: false, message: "Email is already registered!" });
       }
 
       // Hash the password
-      return bcrypt.hash(data.password, 10);
+      return bcrypt.hash(password, 10);
     })
     .then((hashedPassword) => {
-      if (!hashedPassword) return; // Prevent further execution if email exists
-      
-      return req.db.runSql("INSERT INTO Student (firstName, lastName, email, password) VALUES (?, ?, ?, ?);", 
-        [data.firstName, data.lastName, data.email, hashedPassword]);
+      if (!hashedPassword) return; // Prevent further execution if password hashing failed
+
+      // Insert the new student into the database
+      return req.db.runSql(
+        "INSERT INTO Student (firstName, lastName, email, password) VALUES (?, ?, ?, ?);",
+        [firstName, lastName, email, hashedPassword]
+      );
     })
     .then(() => {
-      res.send(JSON.stringify({ success: true, message: "Registration successful!" }));
-    })
-    .catch((err) => {
-      console.error(err);
-      res.send(JSON.stringify({ success: false, message: "An internal error occurred. Please try again later." }));
-    });
+      // Fetch the newly registered user from the database
+      req.db.getSql("SELECT * FROM Student WHERE email = ?;", [email])
+  .then((students) => {
+    if (!students || students.length === 0) {
+      return res.json({ success: false, message: "User not found after registration." });
+    }
+
+    const student = students[0]; // Get the first user
+
+
+          // Create a session for the newly registered user
+          createSession(req.db, student, res).then(() => {
+            res.json({
+              success: true,
+              message: "Registration successful! Logged in automatically.",
+            });
+          }).catch(errorInternal);
+        }).catch(errorInternal);
+    }).catch(errorInternal);
+
+  function errorInternal(err) {
+    console.error("Registration error:", err);
+    res.json({ success: false, message: "An internal error occurred. Please try again later." });
+  }
 }
 
-module.exports = userRegistration;
+module.exports = userRegister;
