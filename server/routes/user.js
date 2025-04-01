@@ -51,7 +51,7 @@ module.exports = router;
 
 
 // for testing only, do not use this.
-var testDb;
+var testMade = false;
 function testCase(req, res, next) {
   req.user = {
     loggedIn: true,
@@ -136,8 +136,8 @@ function testCase(req, res, next) {
     ).then(() => next());
   };
   
-  if (!testDb){
-    testDb = new sqlite3.Database(":memory:"); // for now in memory for easy testing
+  if (!testMade){
+    testMade = true;
     
     // Initialize database and create necessary tables
     fs.readFile("private/dbdef.txt"
