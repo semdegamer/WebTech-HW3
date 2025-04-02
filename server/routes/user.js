@@ -18,6 +18,12 @@ router.use(function (req, res, next) {
   sessionMiddleware(req, res, next);
 });
 
+router.use(function (req, res, next) {
+  var loggedIn = req.session && req.session.user ? true : false; // Check if user is logged in
+  req.loggedIn = loggedIn; // Attach loggedIn to the request object for later use
+  sessionMiddleware(req, res, next);
+});
+
 /* GET Messages Page */
 router.get('/messages', userChats.getChatsPage);
 
@@ -33,7 +39,7 @@ router.get('/messages/:chat/events', userChats.messageStream);
 
 /* GET Courses Page */
 router.get('/courses', function (req, res) {
-    if (!req.session || !req.session.user) {
+    if (!!req.loggedIn) {
         return res.redirect('/auth/login');
     }
     res.render('user/courses', { user: req.session.user });
@@ -41,7 +47,7 @@ router.get('/courses', function (req, res) {
 
 /* GET Profile Page */
 router.get('/profile', function (req, res) {
-    if (!req.session || !req.session.user) {
+    if (!req.loggedIn) {
         return res.redirect('/auth/login');
     }
     res.render('user/profile', { user: req.session.user });

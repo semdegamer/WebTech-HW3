@@ -1,58 +1,66 @@
 const crypto = require('crypto');
 const dayjs = require('dayjs');
 
-// This middleware checks if a session exists for the user and if it is valid
+// Middleware to check session validity
 module.exports = function sessionMiddleware(req, res, next) {
-    const sessionId = req.cookies.sessionId;
+    const excludedRoutes = ['/auth/login', '/auth/register']; // Exclude only auth-related routes
+    if (excludedRoutes.includes(req.path)) {
+        return next(); // Skip middleware for these routes
+    }
 
-    if (!session || session.expiresAt < dayjs().unix()) {
-        res.clearCookie('sessionId');
-        return res.redirect('/auth/login'); 
+    const sessionId = req.cookies.sessionId;
+    req.loggedIn = false; // Default to not logged in
+    req.session = null; 
+    req.user = null; 
+
+    if (!sessionId) {
+        return next(); // No session, but don't redirect for public routes like `/`
     }
 
     req.db.getSql("SELECT studentId, expiresAt FROM Session WHERE sessionId = ?", [sessionId])
         .then((session) => {
             if (!session || session.expiresAt < dayjs().unix()) {
                 res.clearCookie('sessionId');
-                return next(); // No valid session found, redirect to login
+                return next(); // Session expired or invalid, but don't redirect
             }
-
-            req.db.getSql("SELECT * FROM Student WHERE id = ?", [session.studentId])
-                .then((student) => {
-                    if (!student) {
-                        res.clearCookie('sessionId');
-                        return next();
-                    }
-
-                    req.session = { user: student }; // Store the student data in the session
-                    next();
-                })
-                .catch((err) => {
-                    console.error("Error fetching student:", err);
-                    next();
-                });
+            return req.db.getSql("SELECT * FROM Student WHERE studentId = ?", [session.studentId]);
+        })
+        .then((student) => {
+            if (student) {
+                req.session = { user: student };
+                req.loggedIn = true;
+                req.user = student;
+            }
+            next(); 
         })
         .catch((err) => {
-            console.error("Error checking session:", err);
-            next();
+            console.error("Session error:", err);
+            next(); 
         });
 };
 
-// This function creates a new session for the student and sets a cookie in the response
+// Function to create a new session
 module.exports.createSession = function (db, student, res) {
+    const studentId = student.studentId; 
+
+    if (!studentId) {
+        console.error("Invalid student object passed to createSession:", student);
+        return Promise.reject(new Error("Invalid student object"));
+    }
+
     const sessionId = crypto.randomBytes(32).toString('hex');
     const expiresAt = dayjs().add(1, 'hour').unix();
     const createdAt = dayjs().unix();
 
-    return db.runSql("INSERT INTO Session(sessionId, studentId, expiresAt, createdAt) VALUES (?, ?, ?, ?);",
-        [sessionId, student.id, expiresAt, createdAt]
+    return db.runSql(
+        "INSERT INTO Session(sessionId, studentId, expiresAt, createdAt) VALUES (?, ?, ?, ?);",
+        [sessionId, studentId, expiresAt, createdAt]
     ).then(() => {
         res.cookie("sessionId", sessionId, {
             httpOnly: true,
-            secure: true, 
-            sameSite: 'Strict', // Prevent CSRF attacks
-            maxAge: 3600000 // 1 hour
-            
+            secure: true,
+            sameSite: 'Strict',
+            maxAge: 3600000 
         });
     });
 };

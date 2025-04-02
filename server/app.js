@@ -7,6 +7,7 @@ var bcrypt = require('bcrypt');
 //var helmet = require('helmet'); // security headers
 
 var dbhelper = require('./middleware/databaseHelper');
+var sessionMiddleware = require('./middleware/session');
 
 var publicRouter = require('./routes/public');
 var authRouter = require('./routes/auth');
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(dbhelper);
+app.use(sessionMiddleware);
 
 app.use((req, res, next) => {
   console.log("_1");

@@ -5,12 +5,12 @@ var userLogin = require('../middleware/userLogin');
 var userRegistration = require('../middleware/userRegistration');
 
 router.use(function(req, res, next) {
-  var loggedIn = false;
-  // check if user is logged in
-  if (loggedIn)
+  var loggedIn = req.session && req.session.user ? true : false; // Check if user is logged in
+  if (loggedIn) {
     res.redirect('/');
-  else
+  } else {
     next();
+  }
 });
 
 /* GET Login Page */
