@@ -80,7 +80,7 @@ const allSql = (sql, params = [], localDb) => new Promise((res, rej) => {
 // the module function that adds the usefull db functions and the db itself to the req object, for easy access by other middleware
 function dbHelper(req, res, next) {
   req.db = {
-    get: db,
+    baseDb: db,
     runSql: runSql,
     getSql: getSql,
     allSql: allSql
