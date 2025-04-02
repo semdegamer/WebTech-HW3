@@ -1,10 +1,10 @@
 const express = require('express');
 const sessionMiddleware = require('../middleware/session');
-const userChats = require('../middleware/userChats');
-const sqlite3 = require("sqlite3").verbose(); // verbose for better error logging
 const dayjs = require('dayjs'); // Library for handling date and time operations
 
 const router = express.Router();
+
+var messagesRouter = require('./userMessages');
 
 router.use(function (req, res, next) {
   // for testing
@@ -25,17 +25,7 @@ router.use(function (req, res, next) {
 });
 
 /* GET Messages Page */
-router.get('/messages', userChats.getChatsPage);
-
-router.post('/messages', userChats.createChat);
-
-router.param('chat', userChats.paramMessageChat);
-
-router.get('/messages/:chat', userChats.getMessagePage);
-
-router.post('/messages/:chat', userChats.postMessage);
-
-router.get('/messages/:chat/events', userChats.messageStream);
+router.use('/messages', messagesRouter);
 
 /* GET Courses Page */
 router.get('/courses', function (req, res) {
