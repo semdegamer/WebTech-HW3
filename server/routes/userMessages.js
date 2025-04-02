@@ -87,7 +87,7 @@ router.post('/', function (req, res, next) {
 						let promises = [];
 						chat = data.lastID;
 
-						memberList.forEach(member => promises.push(createChatParticipent(req.db, chat, user.id)));
+						memberList.forEach(member => promises.push(createChatParticipent(req.db, chat, member)));
 
 						return Promise.all(promises);
 					})
@@ -300,7 +300,7 @@ function createChat(db, name) {
 }
 
 function createChatParticipent(db, chatId, userId) {
-	return req.db.runSql(`
+	return db.runSql(`
 		INSERT INTO ChatParticipent(chatId, studentId)
-		VALUES (?, ?)`, [lastID, member]);
+		VALUES (?, ?)`, [chatId, userId]);
 }

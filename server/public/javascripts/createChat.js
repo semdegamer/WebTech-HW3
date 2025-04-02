@@ -9,17 +9,24 @@ const chatMembers = document.querySelectorAll(".chats__member");
 const addButtonText = addButton.textContent;
 var formToggle = false;
 
+function hideForm() {
+  chatlist.style.display = "inline-flex";
+  chatFormWrapper.style.display = "none";
+  addButton.textContent = addButtonText;
+}
+function showForm() {
+  chatlist.style.display = "none";
+  chatFormWrapper.style.display = "inline-flex";
+  addButton.textContent = "🗙 Cancel";
+}
+
 addButton.addEventListener('click', (event) => {
   if (formToggle) {
     formToggle = false;
-    chatlist.style.display = "inline-flex";
-    chatFormWrapper.style.display = "none";
-    addButton.textContent = addButtonText;
+    hideForm();
   } else {
     formToggle = true;
-    chatlist.style.display = "none";
-    chatFormWrapper.style.display = "inline-flex";
-    addButton.textContent = "🗙 Cancel";
+    showForm()
   }
 });
 
@@ -27,9 +34,9 @@ chatForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   const name = chatName.value;
-  const members = Array.from(chatMembers).map(member => member.checked ? ',' + member.getAttribute("studentId") : "").join("");
+  const members = Array.from(chatMembers).filter(el => el.checked).map(el => parseInt(el.getAttribute("studentId")));
 
-  if (!name || !members) return;
+  if (!name || !members || members.length == 0) return;
 
   var link;
   if (window.location.pathname.endsWith("messages"))
@@ -44,7 +51,7 @@ chatForm.addEventListener('submit', (event) => {
       'Accept': 'text/plain',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({name: name, members: members})
+    body: JSON.stringify({name: name, members: JSON.stringify(members)})
   }).then(res => res.text())
     .then(res => {
     chatName.value = '';
@@ -55,6 +62,9 @@ chatForm.addEventListener('submit', (event) => {
     div.innerHTML = res;
     var chat = div.firstElementChild;
     chatlist.querySelector("ul").prepend(chat);
+    
+    formToggle = false;
+    hideForm();
   }).catch(err => {
     console.log(err);
   });
