@@ -18,6 +18,7 @@ router.use(function (req, res, next) {
   sessionMiddleware(req, res, next);
 });
 
+// TODO: why call sessionMiddleware here?
 router.use(function (req, res, next) {
   var loggedIn = req.session && req.session.user ? true : false; // Check if user is logged in
   req.loggedIn = loggedIn; // Attach loggedIn to the request object for later use
@@ -29,7 +30,7 @@ router.use('/messages', messagesRouter);
 
 /* GET Courses Page */
 router.get('/courses', function (req, res) {
-    if (!!req.loggedIn) {
+    if (!req.loggedIn) {
         return res.redirect('/auth/login');
     }
     res.render('user/courses', { user: req.session.user });
@@ -53,10 +54,10 @@ function testCase(req, res, next) {
     loggedIn: true,
     Id: parseInt(req.query.name[3])
   }
-  req.session = {
-    loggedIn: true,
-    user: { studentId: parseInt(req.query.name[3]) }
-  }
+  // req.session = {
+  //   loggedIn: true,
+  //   user: { studentId: parseInt(req.query.name[3]) }
+  // }
   const addUser = (fname, lname, email, password) => {
     return req.db.runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", [fname, lname, email, password]);
   };

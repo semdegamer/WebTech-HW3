@@ -14,7 +14,7 @@ router.use(function (req, res, next) {
 		loggedIn: true,
 		user: {
 			id: req.user.Id,
-			name: "name"
+			name: "name" // TODO: the full name of the user.
 		}
 	};
 
