@@ -7,7 +7,7 @@ block append vars
   - var pathDepth = 2;
 
 block main
-  main.course-list
+  main.main-courses
     if courses && courses.length > 0
       each course in courses
         a.course-item(href="/courses/" + course.courseID)
@@ -15,3 +15,5 @@ block main
           p= course.description
     else
       p No courses available.
+    //- Debugging output to check courses
+    pre= JSON.stringify(courses, null, 2)
