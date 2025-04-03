@@ -7,10 +7,6 @@ block append vars
   - var pathDepth = 2;
 
 block main
-  header
-    a(href="/") Home
-    img.profile-pic(src="/path/to/profile-pic.jpg" alt="Profile" onclick="goToProfile()")
-  
   main.course-list
     if courses && courses.length > 0
       each course in courses
@@ -19,8 +15,3 @@ block main
           p= course.description
     else
       p No courses available.
-
-  script.
-    function goToProfile() {
-      window.location.href = '/profile';
-    }
