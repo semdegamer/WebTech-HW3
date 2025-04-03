@@ -7,13 +7,30 @@ const router = express.Router();
 var messagesRouter = require('./userMessages');
 const profileRouter = require('./userProfile');
 
+// router.use(function (req, res, next) {
+//   // for testing
+//   // TODO: remove later
+//   if (typeof req.query.name == 'string' && req.query.name.startsWith('sem')) {
+//     testCase(req, res, next);
+//     return;
+//   }
+//   next();
+// });
+
 router.use(function (req, res, next) {
-  // for testing
-  // TODO: remove later
-  if (typeof req.query.name == 'string' && req.query.name.startsWith('sem')) {
-    testCase(req, res, next);
-    return;
+  if (!req.loggedIn) {
+    switch (req.method) {
+      case 'GET':
+        return res.redirect('/auth/login');
+      case 'POST':
+        return res.status(401);
+      case 'PUT':
+        return res.status(401);
+      default:
+        return res.status(401);
+    }
   }
+
   next();
 });
 
@@ -22,10 +39,7 @@ router.use('/messages', messagesRouter);
 
 /* GET Courses Page */
 router.get('/courses', function (req, res) {
-    if (!req.loggedIn) {
-        return res.redirect('/auth/login');
-    }
-    res.render('user/courses', { user: req.session.user });
+  res.render('user/courses', { user: req.session.user });
 });
 
 /* GET Profile Page */

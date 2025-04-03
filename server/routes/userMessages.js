@@ -8,7 +8,7 @@ const createMessageHtml = pug.compileFile('views/user/messageGen.pug');
 
 /* temp formatting of data */
 router.use(function (req, res, next) {
-	req.session.user.id = req.user.Id;
+	req.session.user.id = req.user.studentId;
 	req.session.user.name = `${req.user.firstName} ${req.user.lastName}`;
 
 	next();
