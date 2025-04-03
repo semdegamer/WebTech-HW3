@@ -38,9 +38,8 @@ router.use(function (req, res, next) {
 router.use('/messages', messagesRouter);
 
 /* GET Courses Page */
-router.get('/courses', function (req, res) {
-  res.render('user/courses', { user: req.session.user });
-});
+const userCoursesRouter = require('./userCourses');
+router.use('/courses', userCoursesRouter);
 
 /* GET Profile Page */
 router.use('/profile', profileRouter);

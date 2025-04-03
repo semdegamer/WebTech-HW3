@@ -10,10 +10,10 @@ block main
   main.main-courses
     if courses && courses.length > 0
       each course in courses
-        a.course-item(href="/courses/" + course.courseID)
+        a.course-button(href="/courses/" + course.courseID)
           h3= course.name
           p= course.description
     else
       p No courses available.
     //- Debugging output to check courses
-    pre= JSON.stringify(courses, null, 2)
+    //- pre= JSON.stringify(courses, null, 2)

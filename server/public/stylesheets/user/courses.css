@@ -9,3 +9,27 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
     text-align: center; 
 }
+
+a.course-button {
+    display: block;
+    background-color: var(--light-green-color);
+    color: #fff;
+    padding: 10px 20px;
+    margin: 10px auto;
+    border: 3px solid white;
+    border-radius: 10px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  a.course-button:hover {
+    background-color: var(--dark-green-color);
+  }
+  
+  a.course-button h3,
+  a.course-button p {
+    margin: 0;
+    padding: 0;
+  }
