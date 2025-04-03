@@ -12,12 +12,15 @@ block main
     img.profile-pic(src="/path/to/profile-pic.jpg" alt="Profile" onclick="goToProfile()")
   
   main.course-list
-    each course in courses
-      a.course-item(href="/courses/" + course.id)
-        h3= course.name
-        p= course.description
+    if courses && courses.length > 0
+      each course in courses
+        a.course-item(href="/courses/" + course.courseID)
+          h3= course.name
+          p= course.description
+    else
+      p No courses available.
 
-script.
-  function goToProfile() {
-    window.location.href = '/profile';
-  }
+  script.
+    function goToProfile() {
+      window.location.href = '/profile';
+    }

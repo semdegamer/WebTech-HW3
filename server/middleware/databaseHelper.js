@@ -16,8 +16,28 @@ const filldb = () => {
   .then((sql) => execute(sql.toString()))
   .then(() => bcrypt.hash("a", 10))
   .then((passwordHash) => runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", ["sem", "mathan", "a@a", passwordHash]))
-  .then(() => console.log("db made"));
+  .then(() => {
+    // Insert dummy courses into the Course table
+  const courses = [
+    { name: "Computer Architecture and Networks", description: "Learn about computer hardware and networking.", code: "INFONW", instructor: "Lennart Herlaar" },
+    { name: "Imperial Programming", description: "Learn basic programming concepts.", code: "INFOIMP", instructor: "Jeroen Fokker" },
+    { name: "Game Programming", description: "Introduction to game development and programming.", code: "INFOB1GP", instructor: "Angelos Chatzimparmpas" },
+    { name: "Logic for Computer Science", description: "Learn logic foundations for computing.", code: "INFOB1LI", instructor: "Wouter Swierstra" },
+    { name: "Computer Science Introduction Project", description: "A project-based introduction to computer science.", code: "INFOB1PICA", instructor: "Jelle Oostveen" },
+    { name: "Game Technology Introduction Project", description: "Project-based learning about game technology.", code: "INFOB1PGT", instructor: "Simon van Wageningen" },
+    { name: "Databases", description: "Introduction to relational databases and SQL.", code: "INFODB", instructor: "Hans Philippi" },
+    { name: "Game Design", description: "The principles of designing games.", code: "INFOB2GO", instructor: "Sander Bakkes" },
+    { name: "Web Technology", description: "Introduction to web development and technologies.", code: "INFOB2WT", instructor: "Sergey Sosnovsky" },
+  ];
+
+  // Insert courses into the database
+  return Promise.all(courses.map(course => 
+    runSql("INSERT INTO Course(name, description, code, instructor) VALUES(?, ?, ?, ?);", [course.name, course.description, course.code, course.instructor])
+  ));
+})
+.then(() => console.log("db made and courses added"));
 }
+
 
 // deletes the db if it exists, and then calls fillDb
 if (fs.existsSync(dbpath)) {

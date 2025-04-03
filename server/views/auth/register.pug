@@ -45,15 +45,37 @@ block main
       errorMessage.textContent = ""; // Clear previous error messages
 
       // Validate names (only letters allowed)
-      function validateName(name) {
-        return /^[a-zA-Z]+$/.test(name);
-      }
-
-      if (!validateName(firstName) || !validateName(lastName)) {
+      const nameRegex = /^[a-zA-Z]+$/;
+      if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
         errorMessage.textContent = "Names can only contain letters!";
         return;
       }
 
+      // Validate name lengths
+      if (firstName.length < 2 || firstName.length > 50 || lastName.length < 2 || lastName.length > 50) {
+        errorMessage.textContent = "Names must be between 2 and 50 characters!";
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        errorMessage.textContent = "Invalid email format!";
+        return;
+      }
+
+      // Validate email length
+      if (email.length > 100) {
+        errorMessage.textContent = "Email must be 100 characters or less!";
+        return;
+      }
+
+      // Check password length
+      if (password.length < 8 || password.length > 100) {
+        errorMessage.textContent = "Password must be between 8 and 100 characters!";
+        return;
+      }
+      
       // Check if passwords match
       if (password !== confirmPassword) {
         errorMessage.textContent = "Passwords do not match!";

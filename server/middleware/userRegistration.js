@@ -8,6 +8,28 @@ function userRegister(req, res) {
     if (!firstName || !lastName || !email || !password) {
         return res.json({ success: false, message: "All fields are required!" });
     }
+    
+    // Character limits
+    if (
+      firstName.length < 2 || firstName.length > 50 ||
+      lastName.length < 2 || lastName.length > 50 ||
+      email.length > 100 ||
+      password.length < 8 || password.length > 100
+  ) {
+      return res.json({ success: false, message: "Invalid input length!" });
+  }
+
+  // Name validation (only letters allowed)
+  const nameRegex = /^[a-zA-Z]+$/;
+  if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+      return res.json({ success: false, message: "Names can only contain letters!" });
+  }
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+      return res.json({ success: false, message: "Invalid email format!" });
+  }
 
     // Check if the email already exists in the database
     req.db.getSql("SELECT * FROM Student WHERE email = ?;", [email])

@@ -1,0 +1,11 @@
+-- Insert courses into the Course table
+INSERT INTO Course (name, description, code, instructor) VALUES
+('Computer Architecture and Networks', 'Study of computer hardware, networking, and system architecture.', 'INFONW', 'Lennart Herlaar'),
+('Imperial Programming', 'Learn basic programming concepts and techniques.', 'INFOIMP', 'Jeroen Fokker'),
+('Game Programming', 'Fundamentals of programming for game development.', 'INFOB1GP', 'Angelos Chatzimparmpas'),
+('Logic for Computer Science', 'Introduction to logic and its applications in computing.', 'INFOB1LI', 'Wouter Swierstra'),
+('Computer Science Introduction Project', 'Hands-on introduction to key computer science concepts.', 'INFOB1PICA', 'Jelle Oostveen'),
+('Game Technology Introduction Project', 'Project-based exploration of game development technologies.', 'INFOB1PGT', 'Simon van Wageningen'),
+('Databases', 'Design, implementation, and management of relational databases.', 'INFODB', 'Hans Philippi'),
+('Game Design', 'Principles and methodologies for designing interactive games.', 'INFOB2GO', 'Sander Bakkes'),
+('Web Technology', 'Development and deployment of modern web applications.', 'INFOB2WT', 'Sergey Sosnovsky');
