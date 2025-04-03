@@ -10,33 +10,41 @@ block main
     h1 Profile
     .profile-sections
       .profile-box 
-        // Avatar (Profile Picture)
         div.avatar
-          img(src="../images/blank-profile.jpg" alt="Avatar" class="avatar-img")
-        
-        // Button to change the avatar
+          img(src=user.photoLink || "../images/blank-profile.jpg" alt="Avatar" class="avatar-img")
+
         button.profile-btn(type="button" onclick="changeAvatar()") Change Avatar
-        
-        // Name 
-        h2.profile-name Emma Bout   
+
+        h2.profile-name= user.firstName + " " + user.lastName 
+
       .profile-box 
         h2.profile-friend Friend Requests
+      
       .profile-box 
         h2.profile-edit Edit Profile
-        form.profile-form
-          // First Name, Last Name, Age Fields
+        form.profile-form#profileForm
           .input-group
-            input(type="text" name="first-name" value="Emma")
-            input(type="text" name="last-name" value="Bout")
-            input(type="number" name="age" value="21")
+            label(for="firstName") First Name
+            input#firstName(type="text" name="firstName" value=user.firstName required)
+          .input-group
+            label(for="lastName") Last Name
+            input#lastName(type="text" name="lastName" value=user.lastName required)
+          .input-group
+            label(for="birthDate") Birth Date
+            input#birthDate(type="date" name="birthDate" value=(user.birthDate ? user.birthDate.toISOString().split('T')[0] : ''))
 
-          // Email Field (Longer)
+          .input-group
+            label(for="program") Program
+            input#program(type="text" name="programId" value=user.program)
+
           .input-group.email
-            input(type="email" name="email" value="emma.bout@example.com")
+            label(for="email") Email
+            input#email(type="email" name="email" value=user.email required)
 
-          // Hobbies Field (Longer)
           .input-group.hobbies
-            input(type="text" name="hobbies" value="Reading, Hiking, Gaming")
+            label(for="hobbies") Hobbies
+            input#hobbies(type="text" name="hobbies" value=user.hobbies)
 
-          // Save Button
-          button.profile-btn(type="button" onclick="enableEditing()") Save Profile
+          button.profile-btn(type="button" onclick="updateProfile()") Save Profile
+
+    script(src="../javascripts/profile.js")

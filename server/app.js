@@ -12,6 +12,7 @@ var sessionMiddleware = require('./middleware/session');
 var publicRouter = require('./routes/public');
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
+var userProfileRouter = require('./routes/userProfile');
 
 var app = express();
 
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 app.use('/', publicRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/user', userProfileRouter); 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

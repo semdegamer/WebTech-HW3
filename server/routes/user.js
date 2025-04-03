@@ -1,10 +1,11 @@
 const express = require('express');
 const sessionMiddleware = require('../middleware/session');
-const dayjs = require('dayjs'); // Library for handling date and time operations
+const dayjs = require('dayjs'); 
 
 const router = express.Router();
 
 var messagesRouter = require('./userMessages');
+const profileRouter = require('./userProfile');
 
 router.use(function (req, res, next) {
   // for testing
@@ -18,11 +19,12 @@ router.use(function (req, res, next) {
   sessionMiddleware(req, res, next);
 });
 
-// TODO: why call sessionMiddleware here?
-router.use(function (req, res, next) {
-  var loggedIn = req.session && req.session.user ? true : false; // Check if user is logged in
-  req.loggedIn = loggedIn; // Attach loggedIn to the request object for later use
-  sessionMiddleware(req, res, next);
+// Check session & set loggedIn flag
+router.use((req, res, next) => {
+  sessionMiddleware(req, res, () => {
+    req.loggedIn = req.session?.user ? true : false;
+    next();
+  });
 });
 
 /* GET Messages Page */
@@ -37,12 +39,7 @@ router.get('/courses', function (req, res) {
 });
 
 /* GET Profile Page */
-router.get('/profile', function (req, res) {
-    if (!req.loggedIn) {
-        return res.redirect('/auth/login');
-    }
-    res.render('user/profile', { user: req.session.user });
-});
+router.use('/profile', profileRouter);
 
 module.exports = router;
 
