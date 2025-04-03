@@ -1,2 +1,19 @@
 main
-  h1 Welcome to this site!
+  if user && user.firstName
+    h1 Welcome to the Student Social Network, #{user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1)}!
+    div.description
+      p This platform allows students to connect, interact, and collaborate with their peers in an online community. Whether you're looking to connect with fellow students in your courses, send messages to friends, this website has it all.
+      p You can register a profile and later add providing details like your name, program/major, hobbies, and courses you've taken. Once registered and logged in, you can:
+      ul
+        li Modify your profile: Update your information anytime, including your photo, age, or courses taken.
+        li Browse courses: View the list of courses you've enrolled in and discover other students who share the same academic interests.
+        li Send friend requests: Connect with classmates by sending friend requests to students in your courses.
+        li Manage your friendships: Accept or decline friend requests and send messages to your friends.
+        li View friends' profiles: Explore the full profiles of friends, including their courses, photos, and more.
+      p This website is built to help students not only stay in touch with their classmates but also make new connections in their academic journey. 
+      p Enjoy browsing, interacting, and learning together with your peers!
+  else
+    h1 Welcome to the Student Social Network!
+    h3 Please log in to access your profile and connect with other students.
+    div.home-image
+      img(src="/images/home-image.jpg" alt="Welcome Image")

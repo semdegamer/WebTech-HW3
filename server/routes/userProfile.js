@@ -7,7 +7,7 @@ const router = express.Router();
 // multer for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, path.join(__dirname, '../public/images')); 
+      cb(null, path.join(__dirname, '../public/images/user-images')); 
     },
     filename: (req, file, cb) => {
       const uniqueName = `${req.session.user.studentId}-${Date.now()}${path.extname(file.originalname)}`;
@@ -70,7 +70,7 @@ router.post('/upload-avatar', upload.single('avatar'), (req, res) => {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
   
-    const avatarPath = `/images/${req.file.filename}`;
+    const avatarPath = `/images/user-images/${req.file.filename}`;
   
     req.db.runSql(
       "UPDATE Student SET photoLink = ? WHERE studentId = ?;",
