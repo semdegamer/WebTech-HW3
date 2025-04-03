@@ -30,6 +30,7 @@ CREATE TABLE CourseEnrollment (
   courseId INTEGER,
   FOREIGN KEY(studentId) REFERENCES Student(studentId),
   FOREIGN KEY(courseId) REFERENCES Course(courseId)
+  UNIQUE(studentId, courseId)
 );
 
 CREATE TABLE Friendship (
