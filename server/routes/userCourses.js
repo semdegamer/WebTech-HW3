@@ -43,4 +43,76 @@ router.get('/', (req, res) => {
     });
 });
 
+// GET Course Details Page
+router.get('/:courseId', (req, res) => {
+  if (!req.loggedIn) {
+    return res.redirect('/auth/login');
+  }
+
+  const courseId = req.params.courseId;
+
+  // Query to get course details
+  req.db.getSql("SELECT * FROM Course WHERE courseID = ?;", [courseId])
+    .then(course => {
+      if (!course) {
+        return res.status(404).send("Course not found");
+      }
+
+      // Query to get enrolled students
+      req.db.allSql(`
+        SELECT S.studentId, S.firstName, S.lastName, S.profilePicture 
+        FROM Student S
+        JOIN Enrollment E ON E.studentId = S.studentId
+        WHERE E.courseId = ?;
+      `, [courseId])
+        .then(students => {
+          res.render('user/courseDetails', {
+            user: req.session.user,
+            course: course,
+            students: students || [],
+            error: null
+          });
+        })
+        .catch(err => {
+          console.error("Error fetching students:", err);
+          res.render('user/courseDetails', {
+            user: req.session.user,
+            course: course,
+            students: [],
+            error: "An error occurred while fetching the students."
+          });
+        });
+    })
+    .catch(err => {
+      console.error("Error fetching course details:", err);
+      res.render('user/courseDetails', {
+        user: req.session.user,
+        course: null,
+        students: [],
+        error: "An error occurred while fetching course details."
+      });
+    });
+});
+
+// POST - Send a friend request to a student
+router.post('/:courseId/friend-request', (req, res) => {
+  if (!req.loggedIn) {
+    return res.redirect('/auth/login');
+  }
+
+  const studentId = req.body.studentId;
+
+  // Send a friend request (implement your logic here, e.g., insert into 'FriendRequest' table)
+  req.db.runSql("INSERT INTO FriendRequest (senderId, receiverId) VALUES (?, ?)", [req.session.user.studentId, studentId])
+    .then(() => {
+      // Redirect back to course details page
+      res.redirect('/user/courses/' + req.params.courseId);  
+    })
+    .catch(err => {
+      console.error("Error sending friend request:", err);
+      // Redirect back with error
+      res.redirect('/user/courses/' + req.params.courseId);  
+    });
+});
+
 module.exports = router;

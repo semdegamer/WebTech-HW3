@@ -10,6 +10,7 @@
     text-align: center; 
 }
 
+/* Style the buttons used for the courses page */
 a.course-button {
     display: block;
     background-color: var(--light-green-color);
