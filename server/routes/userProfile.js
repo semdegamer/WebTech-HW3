@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
 const router = express.Router();
+const fs = require('fs');
 
 // Create the user-images folder if it does not exist
 const userImagesPath = path.join(__dirname, '../public/images/user-images');
