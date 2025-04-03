@@ -8,15 +8,8 @@ const createMessageHtml = pug.compileFile('views/user/messageGen.pug');
 
 /* temp formatting of data */
 router.use(function (req, res, next) {
-	// for normalized usage of session data, so i can make the message router.
-	// TODO: this may need to be changed later depending on how the session gives its data.
-	req.session = {
-		loggedIn: true,
-		user: {
-			id: req.user.Id,
-			name: "name" // TODO: the full name of the user.
-		}
-	};
+	req.session.user.id = req.user.Id;
+	req.session.user.name = `${req.user.firstName} ${req.user.lastName}`;
 
 	next();
 });
