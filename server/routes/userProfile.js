@@ -4,10 +4,17 @@ const multer = require('multer');
 const path = require('path');
 const router = express.Router();
 
+// Create the user-images folder if it does not exist
+const userImagesPath = path.join(__dirname, '../public/images/user-images');
+if (!fs.existsSync(userImagesPath)) {
+  fs.mkdirSync(userImagesPath, { recursive: true }); // Create the folder if it doesn't exist
+  console.log("Created folder:", userImagesPath);
+}
+
 // multer for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, path.join(__dirname, '../public/images/user-images')); 
+        cb(null, userImagesPath);
     },
     filename: (req, file, cb) => {
       const uniqueName = `${req.session.user.studentId}-${Date.now()}${path.extname(file.originalname)}`;
