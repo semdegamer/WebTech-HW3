@@ -1,7 +1,20 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-
+const multer = require('multer');
+const path = require('path');
 const router = express.Router();
+
+// multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, '../public/images')); 
+    },
+    filename: (req, file, cb) => {
+      const uniqueName = `${req.session.user.studentId}-${Date.now()}${path.extname(file.originalname)}`;
+      cb(null, uniqueName);
+    },
+  });
+  const upload = multer({ storage });
 
 // GET Profile Page
 router.get('/', (req, res) => {
@@ -49,6 +62,27 @@ router.post('/update', (req, res) => {
     console.error("Profile update error:", err);
     res.json({ success: false, message: "An error occurred while updating the profile." });
   });
+});
+
+// Upload Avatar
+router.post('/upload-avatar', upload.single('avatar'), (req, res) => {
+    if (!req.loggedIn) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+  
+    const avatarPath = `/images/${req.file.filename}`;
+  
+    req.db.runSql(
+      "UPDATE Student SET photoLink = ? WHERE studentId = ?;",
+      [avatarPath, req.session.user.studentId]
+    )
+      .then(() => {
+        res.json({ success: true, message: "Avatar updated successfully!" });
+      })
+      .catch((err) => {
+        console.error("Avatar update error:", err);
+        res.status(500).json({ success: false, message: "An error occurred while updating the avatar." });
+      });
 });
 
 module.exports = router;

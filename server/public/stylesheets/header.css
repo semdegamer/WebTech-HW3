@@ -46,13 +46,14 @@ header {
 
 /* Profile Picture */
 .profile-picture img {
-    position: absolute;;
+    position: absolute;
     aspect-ratio: 1/1;
     height: 100%;
     right: 0;
     border-radius: 50%;
     border: 2px solid white;
     transition: transform 0.3s ease-in-out;
+    object-fit: cover;
 }
 
 .profile-picture img:hover {

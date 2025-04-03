@@ -13,7 +13,9 @@ block main
         div.avatar
           img(src=user.photoLink || "../images/blank-profile.jpg" alt="Avatar" class="avatar-img")
 
-        button.profile-btn(type="button" onclick="changeAvatar()") Change Avatar
+          // Add a hidden file input for avatar upload
+          input#avatarInput(type="file" name="avatar" accept="image/*" style="display: none;" onchange="uploadAvatar(this)")
+          button.profile-btn(type="button" onclick="document.getElementById('avatarInput').click()") Change Avatar
 
         h2.profile-name= user.firstName + " " + user.lastName 
 
@@ -31,7 +33,7 @@ block main
             input#lastName(type="text" name="lastName" value=user.lastName required)
           .input-group
             label(for="birthDate") Birth Date
-            input#birthDate(type="date" name="birthDate" value=(user.birthDate ? user.birthDate.toISOString().split('T')[0] : ''))
+            input#birthDate(type="date" name="birthDate" value=user.birthDate)
 
           .input-group
             label(for="program") Program

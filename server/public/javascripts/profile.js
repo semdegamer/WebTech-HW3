@@ -23,4 +23,30 @@ function updateProfile() {
         console.error('Error:', error);
         alert('An unexpected error occurred.');
       });
-  }
+}
+
+function uploadAvatar(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    fetch('/user/upload-avatar', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Avatar updated successfully!');
+          location.reload(); 
+        } else {
+          alert('Error updating avatar: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An unexpected error occurred.');
+      });
+}

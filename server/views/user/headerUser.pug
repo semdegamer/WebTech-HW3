@@ -7,4 +7,4 @@ block navItems
 block headerBody
   div.profile-picture
     a(href="/user/profile")
-      img(src="/images/blank-profile.jpg" alt="My Profile Picture")
+      img(src=(user && user.photoLink) || "../images/blank-profile.jpg" alt="My Profile Picture")
