@@ -12,19 +12,9 @@ router.use(function (req, res, next) {
   // TODO: remove later
   if (typeof req.query.name == 'string' && req.query.name.startsWith('sem')) {
     testCase(req, res, next);
-
     return;
   }
-
-  sessionMiddleware(req, res, next);
-});
-
-// Check session & set loggedIn flag
-router.use((req, res, next) => {
-  sessionMiddleware(req, res, () => {
-    req.loggedIn = req.session?.user ? true : false;
-    next();
-  });
+  next();
 });
 
 /* GET Messages Page */
@@ -42,7 +32,6 @@ router.get('/courses', function (req, res) {
 router.use('/profile', profileRouter);
 
 module.exports = router;
-
 
 // for testing only, do not use this.
 var testMade = false;
