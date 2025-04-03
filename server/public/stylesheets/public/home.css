@@ -24,3 +24,39 @@ main {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
   text-align: center; 
 }
+
+.description {
+  width: 60%;
+  margin: 20px auto;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: var(--medium-blue-color); 
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.description p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.description ul {
+  margin: 20px;
+}
+
+.description li {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.home-image {
+  margin-top: 20px;
+}
+
+.home-image img {
+  max-width: 50%; 
+  height: auto;
+  border-radius: 20px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+}
