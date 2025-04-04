@@ -9,7 +9,7 @@ block append vars
 block main
   main.main-logreg
     div.home-link
-      a(href="/") ⬅home
+      a(href= base ) ⬅home
       h2 Register
       div  
     form#registerForm
@@ -26,7 +26,7 @@ block main
       p#errorMessage.error
       .button-group
         button(type="submit", id="submit-button") Register
-        a(href="/auth/login") Login
+        a(href=(base + "auth/login")) Login
 
   script.
     // Wait until the form is submitted

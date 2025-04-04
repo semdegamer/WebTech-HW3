@@ -62,7 +62,7 @@ router.get('/:courseId', (req, res) => {
       req.db.allSql(`
         SELECT S.studentId, S.firstName, S.lastName, S.profilePicture 
         FROM Student S
-        JOIN Enrollment E ON E.studentId = S.studentId
+        JOIN CourseEnrollment E ON E.studentId = S.studentId
         WHERE E.courseId = ?;
       `, [courseId])
         .then(students => {

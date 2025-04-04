@@ -10,7 +10,7 @@ block main
   main.main-courses
     if courses && courses.length > 0
       each course in courses
-        a.course-button(href="/user/courses/" + course.courseID)
+        a.course-button(href= base + "user/courses/" + course.courseID)
           h3= course.name
           p= course.description
     else
