@@ -62,7 +62,7 @@ module.exports.createSession = function (db, student, res) {
     ).then(() => {
         res.cookie("sessionId", sessionId, {
             httpOnly: true,
-            secure: true,
+            // secure: true,
             sameSite: 'Strict',
             maxAge: 3600000 
         });

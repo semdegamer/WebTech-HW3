@@ -31,7 +31,7 @@ block main
       let errorMessage = document.getElementById("errorMessage");
 
       // Validation
-      fetch('/auth/login', {
+      fetch('login', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -42,7 +42,7 @@ block main
         .then(res => {
         //alert(JSON.stringify(res));
         if (res.success)
-          window.location.href = '../../';
+          window.location.href = '../';
         else
           errorMessage.textContent = res.message;
       }).catch(err => {

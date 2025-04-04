@@ -1,18 +1,18 @@
 mixin navItem(name, link, text)
   li
     - if (name == navSelected)
-      a.nav-link(href=link, class="nav-link--pressed")=text
+      a.nav-link(href=(base + link), class="nav-link--pressed")=text
     - else
-      a.nav-link(href=link)=text
+      a.nav-link(href=(base + link))=text
 
 header
   nav.header-nav
     ul
-      +navItem("homepage", "/", "Home Page")
+      +navItem("homepage", "", "Home Page")
       block navItems 
   
   block headerBody
     nav.header-nav
       ul
-        +navItem("login", "/auth/login", "Log in")
-        +navItem("register", "/auth/register", "Register")
+        +navItem("login", "auth/login", "Log in")
+        +navItem("register", "auth/register", "Register")
