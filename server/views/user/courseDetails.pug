@@ -16,7 +16,7 @@ block main
       if students.length > 0
         each student in students
           a.course-button(href='#')
-            img.profile-pic(src=student.profilePicture || '/images/default-profile.png', alt=student.firstName + ' ' + student.lastName)
+            img.profile-pic(src=student.photoLink || '/images/default-profile.png', alt=student.firstName + ' ' + student.lastName)
             div.course-button-content
               h4= student.firstName + ' ' + student.lastName
               button.friend-request-btn(data-student-id=student.studentId) Send Friend Request
