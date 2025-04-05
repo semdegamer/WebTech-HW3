@@ -17,12 +17,9 @@ router.get('/', (req, res) => {
           courses: [],
           error: "The courses table does not exist in the database."
         });
-      } else {
-        console.log("Course table exists.");
-
-        // Now fetch courses
-        return req.db.allSql("SELECT * FROM Course;");
       }
+
+      return req.db.allSql("SELECT * FROM Course;");
     })
     .then((courses) => {
       if (courses) {
@@ -50,6 +47,7 @@ router.get('/:courseId', (req, res) => {
   }
 
   const courseId = req.params.courseId;
+  const currentUserId = req.session.user.studentId;
 
   // Query to get course details
   req.db.getSql("SELECT * FROM Course WHERE courseID = ?;", [courseId])
@@ -58,13 +56,23 @@ router.get('/:courseId', (req, res) => {
         return res.status(404).send("Course not found");
       }
 
-      // Query to get enrolled students (without seeing the logged in user)
-      req.db.allSql(`
-        SELECT S.studentId, S.firstName, S.lastName, S.photoLink
+      const sql = `
+        SELECT 
+          S.studentId, 
+          S.firstName, 
+          S.lastName, 
+          S.photoLink,
+          EXISTS (
+            SELECT 1 FROM FriendRequest 
+            WHERE studentId_sender = ? 
+              AND studentId_receiver = S.studentId
+          ) AS requestSent
         FROM Student S
         JOIN CourseEnrollment E ON E.studentId = S.studentId
-        WHERE E.courseId = ? AND S.studentID != ?;
-      `, [courseId, req.session.user.studentId])
+        WHERE E.courseId = ? AND S.studentId != ?;
+      `;
+
+      return req.db.allSql(sql, [currentUserId, courseId, currentUserId])
         .then(students => {
           res.render('user/courseDetails', {
             user: req.session.user,
@@ -97,21 +105,22 @@ router.get('/:courseId', (req, res) => {
 // POST - Send a friend request to a student
 router.post('/:courseId/friend-request', (req, res) => {
   if (!req.loggedIn) {
-    return res.redirect('/auth/login');
+    return res.status(401).json({ error: 'Not logged in' });
   }
 
-  const studentId = req.body.studentId;
+  const studentId_receiver = req.body.studentId;
+  const studentId_sender = req.session.user.studentId;
 
-  // Send a friend request (implement your logic here, e.g., insert into 'FriendRequest' table)
-  req.db.runSql("INSERT INTO FriendRequest (senderId, receiverId) VALUES (?, ?)", [req.session.user.studentId, studentId])
+  req.db.runSql(`
+    INSERT INTO FriendRequest (studentId_sender, studentId_receiver, date)
+    VALUES (?, ?, DATE('now'))
+  `, [studentId_sender, studentId_receiver])
     .then(() => {
-      // Redirect back to course details page
-      res.redirect('/user/courses/' + req.params.courseId);  
+      res.status(200).json({ success: true });
     })
     .catch(err => {
       console.error("Error sending friend request:", err);
-      // Redirect back with error
-      res.redirect('/user/courses/' + req.params.courseId);  
+      res.status(500).json({ error: "Failed to send friend request" });
     });
 });
 

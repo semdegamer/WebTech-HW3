@@ -34,3 +34,10 @@ a.course-button {
     margin: 0;
     padding: 0;
   }
+
+  /* Disabled / Sent state */
+.friend-request-btn:disabled {
+  background-color: #aaa;
+  color: #eee;
+  cursor: not-allowed;
+}

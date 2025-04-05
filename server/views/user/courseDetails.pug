@@ -16,10 +16,16 @@ block main
       if students.length > 0
         each student in students
           a.course-button(href='#')
-            img.profile-pic(src=student.photoLink || '/images/default-profile.png', alt=student.firstName + ' ' + student.lastName)
+            img.profile-pic(
+              src=student.photoLink || '/images/default-profile.png', 
+              alt=student.firstName + ' ' + student.lastName
+            )
             div.course-button-content
               h4= student.firstName + ' ' + student.lastName
-              button.friend-request-btn(data-student-id=student.studentId) Send Friend Request
+              button.friend-request-btn(
+                data-student-id=student.studentId,
+                disabled=student.requestSent ? true : false
+              )= student.requestSent ? 'Request Sent!' : 'Send Friend Request'
       else
         p.no-students No students enrolled in this course.
 
@@ -28,3 +34,29 @@ block main
 
     if error
       p.error-message= error
+
+  script.
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.friend-request-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const studentId = btn.getAttribute('data-student-id');
+          const courseId = window.location.pathname.split('/').pop();
+
+          fetch(`/user/courses/${courseId}/friend-request`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `studentId=${encodeURIComponent(studentId)}`,
+          })
+          .then(res => {
+            if (res.ok) {
+              btn.textContent = 'Request Sent!';
+              btn.disabled = true;
+            } else {
+              alert('Error sending friend request');
+            }
+          });
+        });
+      });
+    });
