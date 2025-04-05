@@ -58,13 +58,13 @@ router.get('/:courseId', (req, res) => {
         return res.status(404).send("Course not found");
       }
 
-      // Query to get enrolled students
+      // Query to get enrolled students (without seeing the logged in user)
       req.db.allSql(`
         SELECT S.studentId, S.firstName, S.lastName, S.photoLink
         FROM Student S
         JOIN CourseEnrollment E ON E.studentId = S.studentId
-        WHERE E.courseId = ?;
-      `, [courseId])
+        WHERE E.courseId = ? AND S.studentID != ?;
+      `, [courseId, req.session.user.studentId])
         .then(students => {
           res.render('user/courseDetails', {
             user: req.session.user,

@@ -61,7 +61,7 @@ const filldb = () => {
         throw new Error("Computer Architecture and Networks course not found");
       }
       const archCourseId = courseRows[0].courseID;
-      // Retrieve additional students (assuming they are the ones without the first student's email)
+      // Retrieve additional students
       return allSql("SELECT studentId FROM Student WHERE email != ?;", ["a@a"])
         .then((students) => ({ archCourseId, students }));
     })
