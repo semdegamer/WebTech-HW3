@@ -85,7 +85,7 @@ block main
       submitButton.disabled = true; // Prevent duplicate submissions
 
       try {
-        let response = await fetch('/auth/register', {
+        let response = await fetch('register', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
