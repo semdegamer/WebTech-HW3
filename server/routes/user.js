@@ -4,8 +4,9 @@ const dayjs = require('dayjs');
 
 const router = express.Router();
 
-var messagesRouter = require('./userMessages');
+const messagesRouter = require('./userMessages');
 const profileRouter = require('./userProfile');
+const coursesRouter = require('./userCourses');
 
 // router.use(function (req, res, next) {
 //   // for testing
@@ -38,8 +39,7 @@ router.use(function (req, res, next) {
 router.use('/messages', messagesRouter);
 
 /* GET Courses Page */
-const userCoursesRouter = require('./userCourses');
-router.use('/courses', userCoursesRouter);
+router.use('/courses', coursesRouter);
 
 /* GET Profile Page */
 router.use('/profile', profileRouter);

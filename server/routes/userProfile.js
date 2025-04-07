@@ -1,9 +1,8 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
-const router = express.Router();
 const fs = require('fs');
+const router = express.Router();
 
 // Create the user-images folder if it does not exist
 const userImagesPath = path.join(__dirname, '../public/images/user-images');
@@ -26,11 +25,7 @@ const upload = multer({ storage });
 
 // GET Profile Page
 router.get('/', (req, res) => {
-  if (!req.loggedIn) {
-    return res.redirect('/auth/login');
-  }
-
-  const studentId = req.session.user.studentId; // Assuming studentId is stored in the session
+  const studentId = req.session.user.studentId; 
 
   // Queries to fetch profile, all courses, and enrolled courses
   const profileQuery = `
@@ -81,10 +76,6 @@ router.get('/', (req, res) => {
 
 // Update Profile
 router.post('/update', (req, res) => {
-  if (!req.loggedIn) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
-  }
-
   const { firstName, lastName, email, birthDate, programId, hobbies } = req.body;
 
   console.log("Received data:", req.body); // Debugging
@@ -108,10 +99,6 @@ router.post('/update', (req, res) => {
 
 // Upload Avatar
 router.post('/upload-avatar', upload.single('avatar'), (req, res) => {
-  if (!req.loggedIn) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
-  }
-
   const avatarPath = `/images/user-images/${req.file.filename}`;
 
   req.db.runSql(
@@ -129,10 +116,6 @@ router.post('/upload-avatar', upload.single('avatar'), (req, res) => {
 
 // Enroll or Deselect a Course
 router.post('/enroll', (req, res) => {
-    if (!req.loggedIn) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-  
     const { courseId, action } = req.body;
     const studentId = req.session.user.studentId; 
   
