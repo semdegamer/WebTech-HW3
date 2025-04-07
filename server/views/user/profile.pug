@@ -36,8 +36,13 @@ block main
             input#birthDate(type="date" name="birthDate" value=user.birthDate)
 
           .input-group
-            label(for="program") Program
-            input#program(type="text" name="programId" value=user.program)
+            label(for="programId") Program
+            select#programId(name="programId" required)
+              if programs && programs.length
+                each program in programs
+                  option(value=program.programId selected=(program.programId == user.programId))= program.name
+              else
+                option(disabled selected) No programs available
 
           .input-group.email
             label(for="email") Email
@@ -50,27 +55,26 @@ block main
           button.profile-btn(type="button" onclick="updateProfile()") Save Profile
 
     .course-box 
-        h2.profile-edit Edit Courses
-        .input-group
-          label(for="availableCourses") Available Courses
-          select#availableCourses(multiple size=5)
-              if allCourses && allCourses.length
-                  each course in allCourses
-                      option(value=course.courseID) #{course.name} (#{course.code})
-              else
-                  option(disabled) No courses available
-        .input-group
-          label(for="enrolledCourses") Enrolled Courses
-          select#enrolledCourses(multiple size=5)
-              if enrolledCourses && enrolledCourses.length
-                  each course in enrolledCourses
-                      option(value=course.courseID) #{course.name} (#{course.code})
-              else
-                  option(disabled) No enrolled courses
-        .input-group
-            button.profile-btn(type="button" onclick="enrollCourse()") Enroll
-            button.profile-btn(type="button" onclick="deselectCourse()") Deselect
+      h2.profile-edit Edit Courses
 
+      .input-group
+        label(for="availableCourses") Available Courses
+        select#availableCourses(multiple size=5)
+          if allCourses && allCourses.length
+            each course in allCourses
+              option(value=course.courseID) #{course.name} (#{course.code})
+          else
+            option(disabled) No courses available
+        button.profile-btn(type="button" onclick="enrollCourse()") Enroll
 
+      .input-group
+        label(for="enrolledCourses") Enrolled Courses
+        select#enrolledCourses(multiple size=5)
+          if enrolledCourses && enrolledCourses.length
+            each course in enrolledCourses
+              option(value=course.courseID) #{course.name} (#{course.code})
+          else
+            option(disabled) No enrolled courses
+        button.profile-btn(type="button" onclick="deselectCourse()") Deselect
 
     script(src="../javascripts/profile.js")

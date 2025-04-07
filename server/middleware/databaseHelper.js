@@ -19,6 +19,20 @@ const filldb = () => {
       runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", ["sem", "mathan", "a@a", passwordHash])
     )
     .then(() => {
+      // Insert dummy programs into the Program table
+      const programs = [
+        { name: "Computer Science", description: "Study of computer systems, software, and data processing." },
+        { name: "Information Technology", description: "The study of how information is stored, processed, and retrieved." },
+        { name: "Artificial Intelligence", description: "Exploring machines that can perform tasks that typically require human intelligence." },
+      ];
+
+      // Insert programs into the database
+      return Promise.all(programs.map(program => 
+        runSql("INSERT INTO Program(name, description) VALUES(?, ?);", 
+          [program.name, program.description])
+      ));
+    })
+    .then(() => {
       // Insert dummy courses into the Course table
       const courses = [
         { name: "Computer Architecture and Networks", description: "Learn about computer hardware and networking.", code: "INFONW", instructor: "Lennart Herlaar" },
@@ -73,10 +87,9 @@ const filldb = () => {
       );
       return Promise.all(enrollmentPromises);
     })
-    .then(() => console.log("Database populated: courses added, additional students inserted and enrolled in Computer Architecture and Networks."))
+    .then(() => console.log("Database populated: courses and programs added, additional students inserted and enrolled in Computer Architecture and Networks."))
     .catch(err => console.error("Error filling the database:", err));
 };
-
 
 // deletes the db if it exists, and then calls fillDb
 if (fs.existsSync(dbpath)) {

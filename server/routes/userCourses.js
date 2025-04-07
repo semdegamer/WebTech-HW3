@@ -3,10 +3,6 @@ const router = express.Router();
 
 // GET Courses Page
 router.get('/', (req, res) => {
-  if (!req.loggedIn) {
-    return res.redirect('/auth/login');
-  }
-
   // Check if the Course table exists before fetching data
   req.db.getSql("SELECT name FROM sqlite_master WHERE type='table' AND name='Course';")
     .then((table) => {
@@ -42,10 +38,6 @@ router.get('/', (req, res) => {
 
 // GET Course Details Page
 router.get('/:courseId', (req, res) => {
-  if (!req.loggedIn) {
-    return res.redirect('/auth/login');
-  }
-
   const courseId = req.params.courseId;
   const currentUserId = req.session.user.studentId;
 
@@ -104,10 +96,6 @@ router.get('/:courseId', (req, res) => {
 
 // POST - Send a friend request to a student
 router.post('/:courseId/friend-request', (req, res) => {
-  if (!req.loggedIn) {
-    return res.status(401).json({ error: 'Not logged in' });
-  }
-
   const studentId_receiver = req.body.studentId;
   const studentId_sender = req.session.user.studentId;
 
