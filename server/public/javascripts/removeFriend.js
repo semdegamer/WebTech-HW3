@@ -6,6 +6,8 @@ function unfriend(event) {
   var friend = event.target;
   var friendId = parseInt(friend.getAttribute('studentId'));
 
+  event.preventDefault();
+
   fetch("friends", {
     method: 'POST',
     headers: {

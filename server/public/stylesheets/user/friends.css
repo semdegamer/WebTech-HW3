@@ -48,6 +48,7 @@ main.main-friends {
   align-items: center;
   flex: 1 0 200px;
   gap: 10px;
+  text-decoration: none;
 }
 .friend-banner__avatar {
   height: 2rem;
