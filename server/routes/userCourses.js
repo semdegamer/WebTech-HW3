@@ -111,17 +111,35 @@ router.post('/:courseId/friend-request', (req, res) => {
   const studentId_receiver = req.body.studentId;
   const studentId_sender = req.session.user.studentId;
 
-  req.db.runSql(`
-    INSERT INTO FriendRequest (studentId_sender, studentId_receiver, date)
-    VALUES (?, ?, DATE('now'))
+  // Prevent sending a request to yourself
+  if (studentId_sender === studentId_receiver) {
+    return res.status(400).json({ error: "Cannot send friend request to yourself" });
+  }
+
+  // Check if a friend request has already been sent
+  req.db.get(`
+    SELECT 1 FROM FriendRequest
+    WHERE studentId_sender = ? AND studentId_receiver = ?
   `, [studentId_sender, studentId_receiver])
-    .then(() => {
-      res.status(200).json({ success: true });
+    .then(existingRequest => {
+      if (existingRequest) {
+        return res.status(400).json({ error: "Friend request already sent" });
+      }
+
+      // Insert new friend request
+      return req.db.runSql(`
+        INSERT INTO FriendRequest (studentId_sender, studentId_receiver, date)
+        VALUES (?, ?, DATE('now'))
+      `, [studentId_sender, studentId_receiver])
+        .then(() => {
+          res.status(200).json({ success: true });
+        });
     })
     .catch(err => {
       console.error("Error sending friend request:", err);
       res.status(500).json({ error: "Failed to send friend request" });
     });
 });
+
 
 module.exports = router;
