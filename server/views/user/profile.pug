@@ -36,8 +36,13 @@ block main
             input#birthDate(type="date" name="birthDate" value=user.birthDate)
 
           .input-group
-            label(for="program") Program
-            input#program(type="text" name="programId" value=user.program)
+            label(for="programId") Program
+            select#programId(name="programId" required)
+              if programs && programs.length
+                each program in programs
+                  option(value=program.programId selected=(program.programId == user.programId))= program.name
+              else
+                option(disabled selected) No programs available
 
           .input-group.email
             label(for="email") Email

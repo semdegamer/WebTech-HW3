@@ -39,19 +39,22 @@ router.get('/', (req, res) => {
     JOIN CourseEnrollment ce ON c.courseID = ce.courseId
     WHERE ce.studentId = ?;
   `;
+  const programQuery = `SELECT * FROM Program;`;
 
   // Fetch profile, all courses, and enrolled courses
   Promise.all([
     req.db.getSql(profileQuery, [studentId]),
     req.db.allSql(allCoursesQuery),
-    req.db.allSql(enrolledCoursesQuery, [studentId])
+    req.db.allSql(enrolledCoursesQuery, [studentId]),
+    req.db.allSql(programQuery),
   ])
-    .then(([profile, allCourses, enrolledCourses]) => {
+    .then(([profile, allCourses, enrolledCourses, programs]) => {
       if (!profile) {
         return res.render('user/profile', { 
           user: req.session.user, 
           allCourses: [], 
           enrolledCourses: [], 
+          programs: [],
           error: "Profile not found." 
         });
       }
@@ -60,7 +63,8 @@ router.get('/', (req, res) => {
       res.render('user/profile', {
         user: profile,
         allCourses: allCourses || [],
-        enrolledCourses: enrolledCourses || []
+        enrolledCourses: enrolledCourses || [],
+        programs: programs || []
       });
     })
     .catch((err) => {
@@ -69,6 +73,7 @@ router.get('/', (req, res) => {
         user: req.session.user,
         allCourses: [],
         enrolledCourses: [],
+        programs: [],
         error: "An error occurred while fetching the profile or courses."
       });
     });
