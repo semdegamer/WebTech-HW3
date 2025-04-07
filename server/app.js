@@ -22,11 +22,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.locals.pretty = true;
 
+// logging to access.log file
 var fs = require('fs');
-var accessLogStream = fs.createWriteStream('./access.log', {flags: 'a'});
-app.use(logger("dev")); // ,{stream: accessLogStream}
-//app.use(helmet());
-//app.disable('x-powered-by');
+var accessLogStream = fs.createWriteStream('./app.log', {flags: 'a'});
+app.use(logger("dev", {stream: accessLogStream}));
+app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -35,11 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(dbhelper);
 app.use(sessionMiddleware);
 
-app.use((req, res, next) => {
-  console.log("_1");
-  next();
-});
-
+// TODO: can this be moved to sessionMiddleware
 // Ensure the name and photolink is available on all pages
 app.use((req, res, next) => {
   if (req.session && req.session.user) {

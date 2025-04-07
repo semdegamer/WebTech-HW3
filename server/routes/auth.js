@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var userLogin = require('../middleware/userLogin');
-var userRegistration = require('../middleware/userRegistration');
+const userLogin = require('../middleware/userLogin');
+const userRegistration = require('../middleware/userRegistration');
 
 router.use(function(req, res, next) {
   var loggedIn = req.session && req.session.user ? true : false; // Check if user is logged in

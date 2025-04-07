@@ -42,15 +42,7 @@ CREATE TABLE Friend (
   friendshipId INTEGER NOT NULL,
   studentId INTEGER NOT NULL,
   PRIMARY KEY(friendshipId, studentId),
-  FOREIGN KEY(friendshipId) REFERENCES Friendship(friendshipId),
-  FOREIGN KEY(studentId) REFERENCES Student(studentId)
-);
-
-CREATE TABLE FriendSeen (
-  friendshipId INTEGER NOT NULL,
-  studentId INTEGER NOT NULL,
-  PRIMARY KEY(friendshipId, studentId),
-  FOREIGN KEY(friendshipId) REFERENCES Friendship(friendshipId),
+  FOREIGN KEY(friendshipId) REFERENCES Friendship(friendshipId) ON DELETE CASCADE,
   FOREIGN KEY(studentId) REFERENCES Student(studentId)
 );
 
@@ -63,19 +55,10 @@ CREATE TABLE FriendRequest (
   FOREIGN KEY(studentId_receiver) REFERENCES Student(studentId)
 );
 
-CREATE TABLE FriendRequestSeen (
-  studentId_sender INTEGER NOT NULL,
-  studentId_receiver INTEGER NOT NULL,
-  PRIMARY KEY(studentId_sender, studentId_receiver),
-  FOREIGN KEY(studentId_sender) REFERENCES Student(studentId),
-  FOREIGN KEY(studentId_receiver) REFERENCES Student(studentId)
-);
-
 CREATE TABLE Chat (
   chatId INTEGER PRIMARY KEY AUTOINCREMENT,
   creationDate DATE NOT NULL,
-  name VARCHAR NOT NULL,
-  lastMessage DATETIME
+  name VARCHAR NOT NULL
 );
 
 CREATE TABLE Message (
@@ -94,15 +77,6 @@ CREATE TABLE ChatParticipent (
   studentId INTEGER NOT NULL,
   FOREIGN KEY(chatId) REFERENCES Chat(chatId),
   FOREIGN KEY(studentId) REFERENCES Student(studentId)
-);
-
-CREATE TABLE ChatSeen (
-  chatId INTEGER NOT NULL,
-  studentId_receiver INTEGER NOT NULL,
-  messageId INTEGER NOT NULL,
-  FOREIGN KEY(chatId) REFERENCES Chat(chatId),
-  FOREIGN KEY(studentId_receiver) REFERENCES Student(studentId),
-  FOREIGN KEY(messageId) REFERENCES Message(messageId)
 );
 
 CREATE TABLE Session (

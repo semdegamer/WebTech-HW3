@@ -3,8 +3,9 @@ extends ../header
 block navItems
   +navItem("messages", "user/messages", "Messages")
   +navItem("courses", "user/courses", "Courses")
+  +navItem("friends", "user/friends", "Friends")
 
 block headerBody
   div.profile-picture
     a(href=(base + "user/profile"))
-      img(src=(user && user.photoLink) || "../images/blank-profile.jpg" alt="My Profile Picture")
+      img(src=(user && user.photoLink && (base + user.photoLink.substring(1))) || (base + "images/blank-profile.jpg") alt="My Profile Picture")
