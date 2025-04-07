@@ -21,8 +21,19 @@ router.get('/login', function(req, res) {
 router.post('/login', userLogin);
 
 /* GET Register Page */
-router.get('/register', function(req, res) {
-  res.render('auth/register');
+router.get('/register', async function(req, res) {
+  try {
+    const courses = await req.db.allSql("SELECT courseID, name FROM Course;");
+    res.render('auth/register', {
+      courses: courses || []
+    });
+  } catch (err) {
+    console.error("Error fetching courses:", err);
+    res.render('auth/register', {
+      courses: [],
+      error: "Failed to load courses. Please try again later."
+    });
+  }
 });
 
 router.post('/register', userRegistration);

@@ -5,31 +5,87 @@ block append vars
   - styles.push("auth/logreg")
   - var pathDepth = 2;
 
-//- Enforce input type on text fields (email for example follows example@example.com (input type= email))
 block main
   main.main-logreg
     div.home-link
-      a(href= base ) ⬅home
+      a(href= base) ⬅home
       h2 Register
-      div  
-    form#registerForm
-      label(for="firstName") Enter first name:
-      input(type="text", id="firstName", placeholder="First Name", required)
-      label(for="lastName") Enter last name:
-      input(type="text", id="lastName", placeholder="Last Name", required)
-      label(for="email") Enter email:
-      input(type="email", id="email", placeholder="Email", required) 
-      label(for="password") Enter password:
-      input(type="password", id="password", placeholder="Password", required)
-      label(for="confirmPassword") Enter password again:
-      input(type="password", id="confirmPassword", placeholder="Repeat Password", required)
+
+    form#registerForm(enctype="multipart/form-data", method="POST", action="/register")
+      //- First Name Field
+      label(for="firstName") First name:
+      input(type="text", id="firstName", name="firstName", placeholder="First Name", required)
+
+      //- Last Name Field
+      label(for="lastName") Last name:
+      input(type="text", id="lastName", name="lastName", placeholder="Last Name", required)
+
+      //- Email Field (Should enforce the email format)
+      label(for="email") Email:
+      input(type="email", id="email", name="email", placeholder="Email", required) 
+
+      //- Password Field
+      label(for="password") Password:
+      input(type="password", id="password", name="password", placeholder="Password", required)
+
+      //- Confirm Password Field
+      label(for="confirmPassword") Confirm password:
+      input(type="password", id="confirmPassword", name="confirmPassword", placeholder="Repeat Password", required)
+
+      //- Optional Birthdate Field
+      label(for="birthDate") Birth date: 
+      input(type="date", id="birthDate", name="birthDate")
+
+      //- Optional Hobbies Field
+      label(for="hobbies") Hobbies (comma separated):
+      input(type="text", id="hobbies", name="hobbies", placeholder="e.g. reading, coding")
+
+      //- Courses Dropdown
+      label(for="courses") Enroll in courses (Press shift/ ctrl to select multiple):
+      select(id="courseIds", name="courseIds", multiple size="5")
+        each course in courses
+          option(value=course.courseID) #{course.name}
+
+      //- Avatar Upload Field
+      label(for="avatarInput") Profile picture:
+      input#avatarInput(type="file", name="avatar", accept="image/*", required)
+
       p#errorMessage.error
+
       .button-group
         button(type="submit", id="submit-button") Register
         a(href=(base + "auth/login")) Login
 
   script.
-    // Wait until the form is submitted
+    // uploadAvatar function to handle avatar upload
+    function uploadAvatar(input) {
+      const formData = new FormData();
+      formData.append('avatar', input.files[0]);
+
+      fetch('/user/upload-avatar', {
+        method: 'POST',
+        body: formData,
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Store the avatar path in a hidden field (or you could just send the URL with the form)
+          const avatarPathInput = document.createElement('input');
+          avatarPathInput.type = 'hidden';
+          avatarPathInput.name = 'avatarPath';
+          avatarPathInput.value = data.avatarPath;  // this will hold the path to the uploaded image
+          document.getElementById('registerForm').appendChild(avatarPathInput);
+        } else {
+          document.getElementById('errorMessage').textContent = data.message || "An error occurred during the upload.";
+        }
+      })
+      .catch((err) => {
+        console.error("Avatar upload error:", err);
+        document.getElementById('errorMessage').textContent = "An error occurred during the upload.";
+      });
+    }
+
+    // Client-side JavaScript for form validation and submission
     document.getElementById("registerForm").addEventListener("submit", async function(event) {
       event.preventDefault();
 
@@ -39,72 +95,78 @@ block main
       let email = document.getElementById("email").value.trim();
       let password = document.getElementById("password").value;
       let confirmPassword = document.getElementById("confirmPassword").value;
+      let birthDate = document.getElementById("birthDate").value || null;
+      let hobbies = document.getElementById("hobbies").value.trim() || null;
+
+      //- Get selected courses (multiple selections allowed)
+      let courseSelect = document.getElementById("courseIds");
+      let courseIds = Array.from(courseSelect.selectedOptions).map(opt => opt.value);
+
       let errorMessage = document.getElementById("errorMessage");
       let submitButton = document.getElementById("submit-button");
 
-      errorMessage.textContent = ""; // Clear previous error messages
+      errorMessage.textContent = "";
 
-      // Validate names (only letters allowed)
+      //- Validation for first and last name (letters only)
       const nameRegex = /^[a-zA-Z]+$/;
       if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
         errorMessage.textContent = "Names can only contain letters!";
         return;
       }
 
-      // Validate name lengths
+      //- Validate that names are between 2 and 50 characters
       if (firstName.length < 2 || firstName.length > 50 || lastName.length < 2 || lastName.length > 50) {
         errorMessage.textContent = "Names must be between 2 and 50 characters!";
         return;
       }
 
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        errorMessage.textContent = "Invalid email format!";
-        return;
-      }
-
-      // Validate email length
+      //- Ensure email length is 100 characters or less
       if (email.length > 100) {
         errorMessage.textContent = "Email must be 100 characters or less!";
         return;
       }
 
-      // Check password length
+      //- Ensure password is between 8 and 100 characters
       if (password.length < 8 || password.length > 100) {
         errorMessage.textContent = "Password must be between 8 and 100 characters!";
         return;
       }
-      
-      // Check if passwords match
+
+      //- Ensure password and confirm password match
       if (password !== confirmPassword) {
         errorMessage.textContent = "Passwords do not match!";
         return;
       }
 
-      submitButton.disabled = true; // Prevent duplicate submissions
+      //- Disable submit button to prevent multiple submissions
+      submitButton.disabled = true;
 
       try {
-        let response = await fetch('register', {
+        //- Send registration data to the server
+        const response = await fetch('register', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ firstName, lastName, email, password })
+          body: JSON.stringify({ firstName, lastName, email, password, birthDate, hobbies, courseIds })
         });
 
-        let result = await response.json();
+        const result = await response.json();
 
+        //- If registration is successful, redirect to home page
         if (result.success) {
-          window.location.href = "../"; // Redirect to home page on succes
+          window.location.href = "../";
         } else {
+          //- Show any error messages from the server
           errorMessage.textContent = result.message;
         }
       } catch (err) {
+        //- Handle errors if the request fails
         errorMessage.textContent = "An error occurred. Please try again later.";
         console.error(err);
       }
 
-      submitButton.disabled = false; // Re-enable button after request
+      //- Re-enable submit button after request
+      submitButton.disabled = false;
     });
