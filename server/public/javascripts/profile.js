@@ -39,7 +39,7 @@ function uploadAvatar(input) {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          alert('Avatar updated successfully!');
+          //alert('Avatar updated successfully!');
           location.reload(); 
         } else {
           alert('Error updating avatar: ' + data.message);

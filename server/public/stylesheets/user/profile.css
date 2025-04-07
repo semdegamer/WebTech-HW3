@@ -1,32 +1,32 @@
-/* Main section for the profile page*/
+/* === General Layout === */
 .main-profile {
     background-color: var(--light-blue-color);
     padding: 20px;
-    margin: 95px auto; 
-    width: 95%; 
-    max-width: 1500px; 
-    border-radius: 20px; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
-    text-align: center; 
+    margin: 95px auto;
+    width: 95%;
+    max-width: 1500px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
 }
 
-/* Style the buttons used for the profile page */
+/* === Buttons === */
 .profile-btn {
-    background-color: var(--light-orange-color);  
+    background-color: var(--light-orange-color);
     color: white;
-    border: 3px solid white; 
-    padding: 10px 15px;  
-    font-size: 14px;   
+    border: 3px solid white;
+    padding: 10px 15px;
+    font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.1s ease-in-out;
 }
 
 .profile-btn:hover {
-    background-color: var(--dark-orange-color); 
+    background-color: var(--dark-orange-color);
 }
 
-/* Container for the three boxes */
+/* === Profile Sections === */
 .profile-sections {
     display: flex;
     justify-content: center;
@@ -35,10 +35,9 @@
     padding: 0 20px;
 }
 
-/* Individual boxes */
 .profile-box {
     background-color: var(--dark-blue-color);
-    height: 600px; 
+    height: 600px;
     border-radius: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -47,53 +46,46 @@
     justify-content: center;
 }
 
-/* Box 1 */
+/* Box-specific flex settings */
 .profile-box:first-child {
     flex: 0 0 25%;
 }
 
-/* Box 2 */
+.profile-box:nth-child(2),
+.profile-box:nth-child(3) {
+    padding-top: 20px;
+    justify-content: flex-start;
+}
+
 .profile-box:nth-child(2) {
     flex: 0 0 25%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; 
-    padding-top: 20px; 
 }
 
-/* Box 3 */
 .profile-box:nth-child(3) {
     flex: 0 0 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; 
-    padding-top: 20px; 
 }
 
-/* For Box 1 */
-/* Style the avatar (profile picture) */
+/* === Avatar and Name === */
 .avatar-img {
-    width: 250px;  
-    height: 250px; 
-    border-radius: 50%; 
-    object-fit: cover;  
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
     margin-bottom: -30px;
 }
 
-/* Style of the name */
 .profile-name {
-    margin-top: 10px; 
+    margin-top: 10px;
     font-size: 3rem;
 }
 
-.profile-friend, .profile-edit {
+.profile-friend,
+.profile-edit,
+.course-box {
     font-size: 2rem;
 }
 
-/* For Box 3 */
-/* Edit Profile Box */
+/* === Profile Form === */
 .profile-form {
     width: 100%;
     display: flex;
@@ -103,17 +95,25 @@
     margin: 20px;
 }
 
-/* Group small inputs in a row */
 .input-group {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: flex-start;
+    align-items: center;
     gap: 20px;
+    width: 100%;
 }
 
-.input-group input {
-    width: 190px; 
-    height: 50px; 
+.input-group label {
+    width: 120px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.input-group input,
+#programId {
+    flex-grow: 0.8;
+    width: 190px;
+    height: 50px;
     background-color: var(--light-blue-color);
     border: none;
     padding: 12px;
@@ -124,17 +124,57 @@
     cursor: pointer;
 }
 
-/* Special styles for Email & Hobbies fields (wider) */
-.input-group.email, .input-group.hobbies {
-    width: 610px;
-}
-
-.input-group.email input, .input-group.hobbies input {
-    width: 100%;
-}
-
-.input-group input:hover {
+.input-group input:hover,
+.input-group input:focus,
+#programId:hover,
+#programId:focus {
     background-color: var(--medium-blue-color);
     color: white;
 }
 
+/* === Course Box === */
+.course-box {
+    background-color: var(--dark-blue-color);
+    height: 600px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto 0;
+    padding: 20px;
+    width: 100%;
+    max-width: 1500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.course-box .input-group {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.course-box .input-group label {
+    width: 500px;
+    text-align: center;
+    font-weight: normal;
+}
+
+.course-box select {
+    width: 610px;
+    height: 120px;
+    background-color: var(--light-blue-color);
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.course-box .profile-btn {
+    width: 200px;
+    margin: 5px;
+}
