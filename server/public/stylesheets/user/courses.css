@@ -35,9 +35,56 @@ a.course-button {
     padding: 0;
   }
 
-  /* Disabled / Sent state */
+  /* Disabled */
 .friend-request-btn:disabled {
   background-color: #aaa;
   color: #eee;
   cursor: not-allowed;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  /* Adjustments for the main courses section */
+  .main-courses {
+      width: 90%;
+      padding: 15px;
+      margin-top: 70px;
+  }
+
+  /* Course button adjustments */
+  a.course-button {
+      padding: 12px 25px;
+      font-size: 1rem; 
+  }
+
+  /* If there are any text elements inside the course button (h3, p), make them more responsive */
+  a.course-button h3,
+  a.course-button p {
+      font-size: 1.2rem; /* Adjust text size */
+  }
+}
+
+/* Very small screens (e.g., phones in portrait mode) */
+@media (max-width: 480px) {
+  body {
+      padding: 10px;
+  }
+
+  /* Adjust the course section further for small screens */
+  .main-courses {
+      width: 100%;
+      margin-top: 50px;
+      padding: 10px;
+  }
+
+  /* Course button adjustments for very small screens */
+  a.course-button {
+      padding: 12px 15px;
+      font-size: 1rem;
+  }
+
+  a.course-button h3,
+  a.course-button p {
+      font-size: 1rem;
+  }
 }
