@@ -178,3 +178,49 @@
     width: 200px;
     margin: 5px;
 }
+
+/* === Responsive Layout === */
+@media (max-width: 950px) {
+    .profile-sections {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .profile-box {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .profile-box:first-child,
+    .profile-box:nth-child(2),
+    .profile-box:nth-child(3) {
+        flex: 0 0 100%;
+    }
+
+    .avatar-img {
+        width: 150px;
+        height: 150px;
+        margin-top: 20px;
+    }
+
+    .profile-name {
+        font-size: 2.5rem;
+    }
+
+    .profile-friend,
+    .profile-edit,
+    .course-box {
+        font-size: 1.5rem;
+    }
+
+    .course-box .input-group label {
+        width: 100%;
+    }
+
+    .course-box select {
+        width: 100%;
+        height: auto;
+    }
+}
