@@ -7,88 +7,19 @@ const bcrypt = require('bcrypt'); // Library for hashing passwords securely
 var dbpath = "private/my.db";
 var db;
 
-// fills the db with the tables and some dummy data.
+// Function to fill the database with necessary tables and sample data
 const filldb = () => {
-  // Initialize database and create necessary tables synchronously
+  // Initialize the database connection
   db = new sqlite3.Database(dbpath);
 
   return fsPromises.readFile("private/dbdef.txt")
     .then((sql) => execute(sql.toString()))
     .then(() => bcrypt.hash("a", 10))
     .then((passwordHash) => 
-      runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", ["sem", "mathan", "a@a", passwordHash])
+      runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", 
+        ["sem", "mathan", "a@a", passwordHash])
     )
-    .then(() => {
-      // Insert dummy programs into the Program table
-      const programs = [
-        { name: "Computer Science", description: "Study of computer systems, software, and data processing." },
-        { name: "Information Technology", description: "The study of how information is stored, processed, and retrieved." },
-        { name: "Artificial Intelligence", description: "Exploring machines that can perform tasks that typically require human intelligence." },
-      ];
-
-      // Insert programs into the database
-      return Promise.all(programs.map(program => 
-        runSql("INSERT INTO Program(name, description) VALUES(?, ?);", 
-          [program.name, program.description])
-      ));
-    })
-    .then(() => {
-      // Insert dummy courses into the Course table
-      const courses = [
-        { name: "Computer Architecture and Networks", description: "Learn about computer hardware and networking.", code: "INFONW", instructor: "Lennart Herlaar" },
-        { name: "Imperial Programming", description: "Learn basic programming concepts.", code: "INFOIMP", instructor: "Jeroen Fokker" },
-        { name: "Game Programming", description: "Introduction to game development and programming.", code: "INFOB1GP", instructor: "Angelos Chatzimparmpas" },
-        { name: "Logic for Computer Science", description: "Learn logic foundations for computing.", code: "INFOB1LI", instructor: "Wouter Swierstra" },
-        { name: "Computer Science Introduction Project", description: "A project-based introduction to computer science.", code: "INFOB1PICA", instructor: "Jelle Oostveen" },
-        { name: "Game Technology Introduction Project", description: "Project-based learning about game technology.", code: "INFOB1PGT", instructor: "Simon van Wageningen" },
-        { name: "Databases", description: "Introduction to relational databases and SQL.", code: "INFODB", instructor: "Hans Philippi" },
-        { name: "Game Design", description: "The principles of designing games.", code: "INFOB2GO", instructor: "Sander Bakkes" },
-        { name: "Web Technology", description: "Introduction to web development and technologies.", code: "INFOB2WT", instructor: "Sergey Sosnovsky" },
-      ];
-
-      // Insert courses into the database
-      return Promise.all(courses.map(course => 
-        runSql("INSERT INTO Course(name, description, code, instructor) VALUES(?, ?, ?, ?);", 
-          [course.name, course.description, course.code, course.instructor])
-      ));
-    })
-    .then(() => {
-      // Insert additional dummy students
-      const additionalStudents = [
-        { firstName: "Alice", lastName: "Smith", email: "alice@example.com", password: "a" },
-        { firstName: "Bob", lastName: "Jones", email: "bob@example.com", password: "a" },
-        { firstName: "Charlie", lastName: "Brown", email: "charlie@example.com", password: "a" }
-      ];
-      return Promise.all(additionalStudents.map(student =>
-        bcrypt.hash(student.password, 10).then(hash =>
-          runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", 
-            [student.firstName, student.lastName, student.email, hash])
-        )
-      ));
-    })
-    .then(() => {
-      // Retrieve the specific courseID for "Computer Architecture and Networks"
-      return allSql("SELECT courseID FROM Course WHERE name = ?;", ["Computer Architecture and Networks"]);
-    })
-    .then((courseRows) => {
-      if (!courseRows || courseRows.length === 0) {
-        throw new Error("Computer Architecture and Networks course not found");
-      }
-      const archCourseId = courseRows[0].courseID;
-      // Retrieve additional students
-      return allSql("SELECT studentId FROM Student WHERE email != ?;", ["a@a"])
-        .then((students) => ({ archCourseId, students }));
-    })
-    .then(({ archCourseId, students }) => {
-      // Enroll each additional student in "Computer Architecture and Networks"
-      const enrollmentPromises = students.map(student =>
-        runSql("INSERT INTO CourseEnrollment(studentId, courseId) VALUES(?, ?);", 
-          [student.studentId, archCourseId])
-      );
-      return Promise.all(enrollmentPromises);
-    })
-    .then(() => console.log("Database populated: courses and programs added, additional students inserted and enrolled in Computer Architecture and Networks."))
-    .catch(err => console.error("Error filling the database:", err));
+    .catch((err) => console.error("Error filling the database:", err));
 };
 
 // deletes the db if it exists, and then calls fillDb
@@ -100,6 +31,32 @@ if (fs.existsSync(dbpath)) {
   filldb()
   .catch((err) => console.log(err));
 }
+
+// Open the database
+const openDb = () => {
+  if (!db) {
+    db = new sqlite3.Database(dbpath, sqlite3.OPEN_READWRITE, (err) => {
+      if (err) {
+        console.error('Error opening database:', err);
+      } else {
+        console.log('Connected to the database.');
+      }
+    });
+  }
+};
+
+// Close the database connection
+const closeDb = () => {
+  if (db) {
+    db.close((err) => {
+      if (err) {
+        console.error('Error closing database:', err);
+      } else {
+        console.log('Database connection closed.');
+      }
+    });
+  }
+};
 
 // for simply executing a sql queries without params
 const execute = async (sql, localDb) => {
@@ -153,6 +110,8 @@ const allSql = (sql, params = [], localDb) => new Promise((res, rej) => {
 function dbHelper(req, res, next) {
   req.db = {
     baseDb: db,
+    openDb: openDb,
+    closeDb: closeDb,
     runSql: runSql,
     getSql: getSql,
     allSql: allSql
