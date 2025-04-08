@@ -22,10 +22,22 @@ block main
             )
             div.course-button-content
               h4= student.firstName + ' ' + student.lastName
-              button.friend-request-btn(
-                data-student-id=student.studentId,
-                disabled=student.requestSent ? true : false
-              )= student.requestSent ? 'Request Sent!' : 'Send Friend Request'
+              //- Only show the friend request button if no pending request and not already friends
+              if student.isFriend
+                button.friend-request-btn(
+                  disabled,
+                  type="button"
+                ) You're already friends :D
+              else if student.requestSent
+                button.friend-request-btn(
+                  disabled,
+                  type="button"
+                ) Request Sent!
+              else
+                button.friend-request-btn(
+                  data-student-id=student.studentId,
+                  type="button"
+                ) Send Friend Request
       else
         p.no-students No students enrolled in this course.
 
@@ -36,27 +48,31 @@ block main
       p.error-message= error
 
   script.
+    // script for sending friend requests
     document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('.friend-request-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          const studentId = btn.getAttribute('data-student-id');
-          const courseId = window.location.pathname.split('/').pop();
+        // Only attach listener if button is not disabled
+        if (!btn.disabled) {
+          btn.addEventListener('click', function () {
+            const studentId = btn.getAttribute('data-student-id');
+            const courseId = window.location.pathname.split('/').pop();
 
-          fetch(`/user/courses/${courseId}/friend-request`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `studentId=${encodeURIComponent(studentId)}`,
-          })
-          .then(res => {
-            if (res.ok) {
-              btn.textContent = 'Request Sent!';
-              btn.disabled = true;
-            } else {
-              alert('Error sending friend request');
-            }
+            fetch(`/user/courses/${courseId}/friend-request`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: `studentId=${encodeURIComponent(studentId)}`,
+            })
+            .then(res => {
+              if (res.ok) {
+                btn.textContent = 'Request Sent!';
+                btn.disabled = true;
+              } else {
+                alert('Error sending friend request');
+              }
+            });
           });
-        });
+        }
       });
     });

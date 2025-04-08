@@ -58,13 +58,18 @@ router.get('/:courseId', (req, res) => {
             SELECT 1 FROM FriendRequest 
             WHERE studentId_sender = ? 
               AND studentId_receiver = S.studentId
-          ) AS requestSent
+          ) AS requestSent,
+          EXISTS (
+            SELECT 1 FROM Friend f1
+            JOIN Friend f2 ON f1.friendshipId = f2.friendshipId
+            WHERE f1.studentId = ? AND f2.studentId = S.studentId
+          ) AS isFriend
         FROM Student S
         JOIN CourseEnrollment E ON E.studentId = S.studentId
         WHERE E.courseId = ? AND S.studentId != ?;
       `;
 
-      return req.db.allSql(sql, [currentUserId, courseId, currentUserId])
+      return req.db.allSql(sql, [currentUserId, currentUserId, courseId, currentUserId])
         .then(students => {
           res.render('user/courseDetails', {
             user: req.session.user,
