@@ -42,7 +42,7 @@ CREATE TABLE Friend (
   friendshipId INTEGER NOT NULL,
   studentId INTEGER NOT NULL,
   PRIMARY KEY(friendshipId, studentId),
-  FOREIGN KEY(friendshipId) REFERENCES Friendship(friendshipId) ON DELETE CASCADE,
+  FOREIGN KEY(friendshipId) REFERENCES Friendship(friendshipId),
   FOREIGN KEY(studentId) REFERENCES Student(studentId)
 );
 

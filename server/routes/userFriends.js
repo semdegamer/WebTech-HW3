@@ -17,8 +17,9 @@ router.post('/', function (req, res, next) {
 	if (!friend || typeof friend !== 'number' || friend < 0 || friend > 1000000)
 		return res.sendStatus(422);
 
-	removeFriendship(req.db, user.studentId, friend)
-		.then(res.json({ success: true }))
+	getFriendship(req.db, user.studentId, friend)
+		.then(data => removeFriend(req.db, data.friendshipId).then(removeFriendship(req.db, data.friendshipId)))
+		.then(() => res.json({ success: true }))
 		.catch(err => error(err, res, next, "Failed to remove friendship."));
 });
 
@@ -43,18 +44,26 @@ function getUserFriends(db, userId) {
     ON S2.studentId = F.studentId
     WHERE S1.studentId = ?;`, [userId]);
 }
-function removeFriendship(db, userId, friendId) {
+
+function getFriendship(db, userId, friendId) {
+	return db.getSql(`
+		SELECT FS.friendshipId
+		FROM Friendship FS
+		JOIN Friend F1
+		ON F1.studentId = ?
+		JOIN Friend F2
+		ON F2.studentId = ?
+		WHERE F1.friendshipId = FS.friendshipId AND F2.friendshipId = FS.friendshipId;`, [userId, friendId]);
+}
+function removeFriend(db, friendshipId) {
+	return db.runSql(`
+		DELETE FROM Friend
+		WHERE friendshipId = ?;`, [friendshipId]);
+}
+function removeFriendship(db, friendshipId) {
 	return db.runSql(`
 		DELETE FROM Friendship
-		WHERE friendshipId IN (
-			SELECT FS.friendshipId
-			FROM Friendship FS
-			JOIN Friend F1
-			ON F1.studentId = ?
-			JOIN Friend F2
-			ON F2.studentId = ?
-			WHERE F1.friendshipId = FS.friendshipId AND F2.friendshipId = FS.friendshipId
-		);`, [userId, friendId]);
+		WHERE friendshipId = ?;`, [friendshipId]);
 }
 
 module.exports = router;

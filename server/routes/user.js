@@ -11,6 +11,7 @@ const profileRouter = require('./userProfile');
 
 // TODO: for testing only
 let dummyFriends = true;
+let dummyFriends = false;
 router.use(function (req, res, next) {
   if (!dummyFriends) {
     dummyFriends = true;
