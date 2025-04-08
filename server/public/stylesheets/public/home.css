@@ -60,3 +60,54 @@ main {
   border-radius: 20px; 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
 }
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  main {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .description {
+    width: 90%;
+    margin-top: 15px;
+  }
+
+  .home-image img {
+    max-width: 80%;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  header {
+    padding: 10px;
+    text-align: center;
+  }
+
+  main {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .description {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .home-image img {
+    max-width: 90%;
+  }
+
+  .description p {
+    font-size: 1rem;
+  }
+
+  .description li {
+    font-size: 1rem;
+  }
+}
