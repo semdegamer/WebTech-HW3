@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
 
   // Queries to fetch profile, all courses, and enrolled courses
   const profileQuery = `
-    SELECT firstName, lastName, email, birthDate, photoLink, programId, hobbies 
+    SELECT studentId, firstName, lastName, email, birthDate, photoLink, programId, hobbies 
     FROM Student 
     WHERE studentId = ?;
   `;
@@ -41,20 +41,29 @@ router.get('/', (req, res) => {
   `;
   const programQuery = `SELECT * FROM Program;`;
 
+  const friendRequestsQuery = `
+  SELECT s.studentId, s.firstName, s.lastName, s.photoLink
+  FROM FriendRequest fr
+  JOIN Student s ON fr.studentId_sender = s.studentId
+  WHERE fr.studentId_receiver = ?;
+`;
+
   // Fetch profile, all courses, and enrolled courses
   Promise.all([
     req.db.getSql(profileQuery, [studentId]),
     req.db.allSql(allCoursesQuery),
     req.db.allSql(enrolledCoursesQuery, [studentId]),
     req.db.allSql(programQuery),
+    req.db.allSql(friendRequestsQuery, [studentId])
   ])
-    .then(([profile, allCourses, enrolledCourses, programs]) => {
+    .then(([profile, allCourses, enrolledCourses, programs, friendRequests]) => {
       if (!profile) {
         return res.render('user/profile', { 
           user: req.session.user, 
           allCourses: [], 
           enrolledCourses: [], 
           programs: [],
+          friendRequests: [],
           error: "Profile not found." 
         });
       }
@@ -64,7 +73,8 @@ router.get('/', (req, res) => {
         user: profile,
         allCourses: allCourses || [],
         enrolledCourses: enrolledCourses || [],
-        programs: programs || []
+        programs: programs || [],
+        friendRequests: friendRequests || []
       });
     })
     .catch((err) => {
@@ -153,5 +163,69 @@ router.post('/enroll', (req, res) => {
       res.status(400).json({ success: false, message: 'Invalid action.' });
     }
   });
+
+// Accept Friend Request
+router.post('/friend-request/accept', async (req, res) => {
+  const senderId = req.body.studentIdSender; // The sender's ID, sent from the client
+  const receiverId = req.session.user.studentId; // The receiver's ID from the session
+
+  if (!senderId || !receiverId) {
+    return res.status(400).json({ error: 'Missing student ID(s).' });
+  }
+
+  try {
+    // 1. Create a new friendship record
+    await req.db.runSql(`INSERT INTO Friendship (date) VALUES (DATE('now'))`);
+
+    // 2. Get the newly created friendshipId
+    const { id: friendshipId } = await req.db.getSql(`SELECT last_insert_rowid() AS id`);
+
+    // 3. Add both students to the Friend table
+    await req.db.runSql(
+      `INSERT INTO Friend (friendshipId, studentId) VALUES (?, ?)`,
+      [friendshipId, senderId]
+    );
+
+    await req.db.runSql(
+      `INSERT INTO Friend (friendshipId, studentId) VALUES (?, ?)`,
+      [friendshipId, receiverId]
+    );
+
+    // 4. Remove the friend request after accepting
+    await req.db.runSql(
+      `DELETE FROM FriendRequest WHERE studentId_sender = ? AND studentId_receiver = ?`,
+      [senderId, receiverId]
+    );
+
+    // 5. Return a success response
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error accepting friend request:', err);
+    res.status(500).json({ error: 'Something went wrong.' });
+  }
+});
+
+// Decline Friend Request
+router.post('/friend-request/decline', async (req, res) => {
+  const senderId = req.body.studentIdSender; // The sender's ID from the client
+  const receiverId = req.session.user.studentId; // The logged-in user's (receiver's) ID
+
+  if (!senderId || !receiverId) {
+    return res.status(400).json({ error: 'Missing student ID(s).' });
+  }
+
+  try {
+    // Deletes the friend request from the FriendRequest table.
+    await req.db.runSql(
+      `DELETE FROM FriendRequest WHERE studentId_sender = ? AND studentId_receiver = ?`,
+      [senderId, receiverId]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error declining friend request:', err);
+    res.status(500).json({ error: 'Something went wrong.' });
+  }
+});
 
 module.exports = router;

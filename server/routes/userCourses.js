@@ -105,7 +105,7 @@ router.post('/:courseId/friend-request', (req, res) => {
   }
 
   // Check if a friend request has already been sent
-  req.db.get(`
+  req.db.getSql(`
     SELECT 1 FROM FriendRequest
     WHERE studentId_sender = ? AND studentId_receiver = ?
   `, [studentId_sender, studentId_receiver])

@@ -102,3 +102,62 @@ async function deselectCourse() {
       alert('Please select a course to deselect.');
     }
 }
+
+// For accepting and declining friend requests
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.friend-request-item').forEach(item => {
+    const studentIdSender = item.getAttribute('data-student-id-sender');
+    const studentIdReceiver = item.getAttribute('data-student-id-receiver');
+
+    const acceptBtn = item.querySelector('.accept');
+    const declineBtn = item.querySelector('.decline');
+
+    // Handle accepting the friend request
+    if (acceptBtn) {
+      acceptBtn.addEventListener('click', () => {
+        fetch('/user/friend-request/accept', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `studentIdSender=${encodeURIComponent(studentIdSender)}&studentIdReceiver=${encodeURIComponent(studentIdReceiver)}`
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            item.remove(); // Remove the friend request from the UI
+          } else {
+            alert('Error accepting request: ' + data.error);
+          }
+        })
+        .catch(err => {
+          console.error('Error accepting friend request:', err);
+        });
+      });
+    }
+
+    // Handle declining the friend request
+    if (declineBtn) {
+      declineBtn.addEventListener('click', () => {
+        fetch('/user/friend-request/decline', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `studentIdSender=${encodeURIComponent(studentIdSender)}&studentIdReceiver=${encodeURIComponent(studentIdReceiver)}`
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            item.remove(); // Remove the declined request from the UI
+          } else {
+            alert('Error declining request: ' + data.error);
+          }
+        })
+        .catch(err => {
+          console.error('Error declining friend request:', err);
+        });
+      });
+    }
+  });
+});
