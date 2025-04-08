@@ -11,7 +11,7 @@ block main
       a(href= base) ⬅home
       h2 Register
 
-    form#registerForm(enctype="multipart/form-data", method="POST", action="/register")
+    form#registerForm(enctype="multipart/form-data", method="POST", action="/auth/register")
       //- First Name Field
       label(for="firstName") First name:
       input(type="text", id="firstName", name="firstName", placeholder="First Name", required)
@@ -57,99 +57,90 @@ block main
         a(href=(base + "auth/login")) Login
 
   script.
-    // uploadAvatar function to handle avatar upload
-    function uploadAvatar(input) {
-      const formData = new FormData();
-      formData.append('avatar', input.files[0]);
-
-      fetch('/user/upload-avatar', {
-        method: 'POST',
-        body: formData,
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          // Store the avatar path in a hidden field (or you could just send the URL with the form)
-          const avatarPathInput = document.createElement('input');
-          avatarPathInput.type = 'hidden';
-          avatarPathInput.name = 'avatarPath';
-          avatarPathInput.value = data.avatarPath;  // this will hold the path to the uploaded image
-          document.getElementById('registerForm').appendChild(avatarPathInput);
-        } else {
-          document.getElementById('errorMessage').textContent = data.message || "An error occurred during the upload.";
-        }
-      })
-      .catch((err) => {
-        console.error("Avatar upload error:", err);
-        document.getElementById('errorMessage').textContent = "An error occurred during the upload.";
-      });
-    }
-
-    // Client-side JavaScript for form validation and submission
+    // Client-side JavaScript for form validation and submission using FormData
     document.getElementById("registerForm").addEventListener("submit", async function(event) {
       event.preventDefault();
 
-      // Get user input values from form fields
+      // Get form fields
       let firstName = document.getElementById("firstName").value.trim();
       let lastName = document.getElementById("lastName").value.trim();
       let email = document.getElementById("email").value.trim();
       let password = document.getElementById("password").value;
       let confirmPassword = document.getElementById("confirmPassword").value;
-      let birthDate = document.getElementById("birthDate").value || null;
-      let hobbies = document.getElementById("hobbies").value.trim() || null;
+      let birthDate = document.getElementById("birthDate").value;
+      let hobbies = document.getElementById("hobbies").value.trim();
 
-      //- Get selected courses (multiple selections allowed)
+      // Get selected courses (multiple selections allowed)
       let courseSelect = document.getElementById("courseIds");
       let courseIds = Array.from(courseSelect.selectedOptions).map(opt => opt.value);
+
+      // Get the avatar file input
+      let avatarInput = document.getElementById("avatarInput");
+      let avatarFile = avatarInput.files[0];
 
       let errorMessage = document.getElementById("errorMessage");
       let submitButton = document.getElementById("submit-button");
 
       errorMessage.textContent = "";
 
-      //- Validation for first and last name (letters only)
+      // Validate names (letters only) and length requirements
       const nameRegex = /^[a-zA-Z]+$/;
       if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
         errorMessage.textContent = "Names can only contain letters!";
         return;
       }
-
-      //- Validate that names are between 2 and 50 characters
       if (firstName.length < 2 || firstName.length > 50 || lastName.length < 2 || lastName.length > 50) {
         errorMessage.textContent = "Names must be between 2 and 50 characters!";
         return;
       }
 
-      //- Ensure email length is 100 characters or less
+      // Validate email length
       if (email.length > 100) {
         errorMessage.textContent = "Email must be 100 characters or less!";
         return;
       }
 
-      //- Ensure password is between 8 and 100 characters
+      // Validate password length
       if (password.length < 8 || password.length > 100) {
         errorMessage.textContent = "Password must be between 8 and 100 characters!";
         return;
       }
-
-      //- Ensure password and confirm password match
+      
+      // Ensure password and confirm password match
       if (password !== confirmPassword) {
         errorMessage.textContent = "Passwords do not match!";
         return;
       }
 
-      //- Disable submit button to prevent multiple submissions
+      // Ensure avatar file is selected
+      if (!avatarFile) {
+        errorMessage.textContent = "Please select a profile picture!";
+        return;
+      }
+
+      // Disable submit button to prevent multiple submissions
       submitButton.disabled = true;
 
+      // Create FormData and append all fields
+      const formData = new FormData();
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("birthDate", birthDate);
+      formData.append("hobbies", hobbies);
+      
+      // When dealing with multiple courses, append each courseId
+      courseIds.forEach(courseId => formData.append("courseIds", courseId));
+      
+      // Append the avatar file
+      formData.append("avatar", avatarFile);
+
       try {
-        //- Send registration data to the server
-        const response = await fetch('register', {
+        // Send the FormData (multipart/form-data is set automatically)
+        const response = await fetch('/auth/register', {
           method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ firstName, lastName, email, password, birthDate, hobbies, courseIds })
+          body: formData
         });
 
         const result = await response.json();
@@ -162,11 +153,10 @@ block main
           errorMessage.textContent = result.message;
         }
       } catch (err) {
-        //- Handle errors if the request fails
-        errorMessage.textContent = "An error occurred. Please try again later.";
         console.error(err);
+        errorMessage.textContent = "An error occurred. Please try again later.";
       }
 
-      //- Re-enable submit button after request
+      // Re-enable the submit button after the request
       submitButton.disabled = false;
     });
