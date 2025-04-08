@@ -12,34 +12,10 @@ block main
       h2= course.name
       p= course.description
 
-      h3 Enrolled Students:
-      if students.length > 0
-        each student in students
-          a.course-button(href='#')
-            img.profile-pic(
-              src=student.photoLink || '/images/default-profile.png', 
-              alt=student.firstName + ' ' + student.lastName
-            )
-            div.course-button-content
-              h4= student.firstName + ' ' + student.lastName
-              //- Only show the friend request button if no pending request and not already friends
-              if student.isFriend
-                button.friend-request-btn(
-                  disabled,
-                  type="button"
-                ) You're already friends :D
-              else if student.requestSent
-                button.friend-request-btn(
-                  disabled,
-                  type="button"
-                ) Request Sent!
-              else
-                button.friend-request-btn(
-                  data-student-id=student.studentId,
-                  type="button"
-                ) Send Friend Request
-      else
-        p.no-students No students enrolled in this course.
+      button#load-students-btn Load Enrolled Students
+
+      div#students-container
+        //- initially empty, then should be filled with students via JS
 
     else
       p Course details not available.
@@ -48,31 +24,78 @@ block main
       p.error-message= error
 
   script.
-    // script for sending friend requests
     document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('.friend-request-btn').forEach(function (btn) {
-        // Only attach listener if button is not disabled
-        if (!btn.disabled) {
+      const loadBtn = document.getElementById('load-students-btn');
+      const container = document.getElementById('students-container');
+      const courseId = window.location.pathname.split('/').pop();
+
+      // Add click event listener to the "Load Students" button
+      loadBtn.addEventListener('click', function () {
+        fetch(`/user/courses/${courseId}/students`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.students && data.students.length > 0) {
+              container.innerHTML = '';
+              // Loop over each student and build the student UI
+              data.students.forEach(student => {
+                const studentEl = document.createElement('a');
+                studentEl.href = '#';
+                studentEl.className = 'course-button';
+
+                studentEl.innerHTML = `
+                  <img class="profile-pic" src="${student.photoLink || '/images/default-profile.png'}" alt="${student.firstName} ${student.lastName}" />
+                  <div class="course-button-content">
+                    <h4>${student.firstName} ${student.lastName}</h4>
+                    ${
+                      student.isFriend
+                        ? '<button class="friend-request-btn" disabled type="button">You\'re already friends :D</button>'
+                        : student.requestSent
+                          ? '<button class="friend-request-btn" disabled type="button">Request Sent!</button>'
+                          : `<button class="friend-request-btn" data-student-id="${student.studentId}" type="button">Send Friend Request</button>`
+                    }
+                  </div>
+                `;
+
+                container.appendChild(studentEl);
+              });
+
+              // Friend request script
+              attachFriendRequestListeners();
+              loadBtn.disabled = true;
+              loadBtn.textContent = "Students Loaded";
+            } else {
+              container.innerHTML = '<p class="no-students">No students enrolled in this course.</p>';
+            }
+          })
+          .catch(() => {
+            container.innerHTML = '<p class="error-message">Failed to load students.</p>';
+          });
+      });
+
+      // adds click listeners to all active "Send Friend Request" buttons
+      function attachFriendRequestListeners() {
+        document.querySelectorAll('.friend-request-btn:not([disabled])').forEach(btn => {
           btn.addEventListener('click', function () {
             const studentId = btn.getAttribute('data-student-id');
             const courseId = window.location.pathname.split('/').pop();
 
+            // Send a POST request to trigger the friend request
             fetch(`/user/courses/${courseId}/friend-request`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
               },
-              body: `studentId=${encodeURIComponent(studentId)}`,
+              body: `studentId=${encodeURIComponent(studentId)}`
             })
-            .then(res => {
-              if (res.ok) {
-                btn.textContent = 'Request Sent!';
-                btn.disabled = true;
-              } else {
-                alert('Error sending friend request');
-              }
-            });
+              .then(res => {
+                if (res.ok) {
+                  btn.textContent = 'Request Sent!';
+                  btn.disabled = true;
+                } else {
+                  alert('Error sending friend request');
+                }
+              });
           });
-        }
-      });
+        });
+      }
     });

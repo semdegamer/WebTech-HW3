@@ -134,5 +134,40 @@ router.post('/:courseId/friend-request', (req, res) => {
     });
 });
 
+// Fetch students for a course
+router.get('/:courseId/students', (req, res) => {
+  const courseId = req.params.courseId;
+  const currentUserId = req.session.user.studentId;
+
+  const sql = `
+    SELECT 
+      S.studentId, 
+      S.firstName, 
+      S.lastName, 
+      S.photoLink,
+      EXISTS (
+        SELECT 1 FROM FriendRequest 
+        WHERE studentId_sender = ? 
+          AND studentId_receiver = S.studentId
+      ) AS requestSent,
+      EXISTS (
+        SELECT 1 FROM Friend f1
+        JOIN Friend f2 ON f1.friendshipId = f2.friendshipId
+        WHERE f1.studentId = ? AND f2.studentId = S.studentId
+      ) AS isFriend
+    FROM Student S
+    JOIN CourseEnrollment E ON E.studentId = S.studentId
+    WHERE E.courseId = ? AND S.studentId != ?;
+  `;
+
+  req.db.allSql(sql, [currentUserId, currentUserId, courseId, currentUserId])
+    .then(students => {
+      res.json({ students });
+    })
+    .catch(err => {
+      console.error("Error fetching students:", err);
+      res.status(500).json({ error: "Failed to fetch students" });
+    });
+});
 
 module.exports = router;
