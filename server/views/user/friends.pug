@@ -11,7 +11,7 @@ block main
     .friends-container
       each friend in friends
         a(href=("profile/" + friend.id)).friend-banner.content-wrapper
-          img.friend-banner__avatar(src=(friend.photoLink && base + friend.photoLink.substring(1)) || "../images/blank-profile.jpg" alt="Avatar" class="avatar-img")
+          img.friend-banner__avatar(src=parseUserImageLink(friend.photoLink) alt="Avatar")
           p.friend-banner__name=friend.name
           button.friend-banner__unfriend.default-button(studentId=friend.id) Unfriend
       

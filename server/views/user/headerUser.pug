@@ -8,4 +8,4 @@ block navItems
 block headerBody
   div.profile-picture
     a(href=(base + "user/profile"))
-      img(src=(user && user.photoLink && (base + user.photoLink.substring(1))) || (base + "images/blank-profile.jpg") alt="My Profile Picture")
+      img(src=parseUserImageLink(user.photoLink) alt="My Profile Picture")

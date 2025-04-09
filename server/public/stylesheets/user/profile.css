@@ -85,6 +85,73 @@
     font-size: 2rem;
 }
 
+/* === Friend Requests === */
+
+.friends-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40ch, 1fr));
+    gap: .5rem;
+    /* optional spacing between items */
+    font-size: .8rem;
+    align-self: stretch;
+}
+
+.friend-banner {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    flex: 1 0 200px;
+    gap: 3px;
+    text-decoration: none;
+}
+
+.friend-banner__avatar {
+    height: 2rem;
+    flex: 0 0 auto;
+}
+
+.friend-banner__name {
+    flex: 1 1 auto;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+}
+
+.friend-banner__accept {
+    flex: 0 0 auto;
+}
+.friend-banner__decline {
+    flex: 0 0 auto;
+}
+
+
+
+.default-button {
+    padding: 5px 3px;
+    border-radius: 10px;
+    background-color: var(--light-green-color);
+    border: 2px solid var(--dark-blue-color);
+    color: white;
+    transition: background-color 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.default-button:hover {
+    background-color: var(--medium-green-color);
+}
+.content-wrapper {
+  padding: 5px 5px;
+  border-radius: 10px;
+  background-color: var(--light-blue-color);
+  border: 2px solid var(--dark-blue-color);
+  color: black;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
 /* === Profile Form === */
 .profile-form {
     width: 100%;

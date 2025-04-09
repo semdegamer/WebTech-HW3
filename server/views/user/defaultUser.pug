@@ -1,5 +1,8 @@
 extends ../default
 
+block prepend vars
+  - var parseUserImageLink = function (link) { return link ? link.startsWith("http") ? link : base + link.substring(1) : base + "images/blank-profile.jpg"; }
+
 block append vars
   - styles.push("header")
 
