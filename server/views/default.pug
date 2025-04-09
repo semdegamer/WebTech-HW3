@@ -1,7 +1,13 @@
+//- This is the most default file used by almost all pug files, this gives the basic header and some simple code to dynamically load scripts and styles.
+
+//- This block allows extending files to define variables that can be used in the entire pug file
 block vars
   - var styles = []
   - var scripts = []
 
+//- 
+  this allows simple generalization for relative links, which is needed for our website to work locally and on the server.
+  The path depth is defined in the most outer extending file that knows the length of its address (/ = 0, /user/profile = 2, /user/profile/20 = 3)
 - var base = "./" + "../".repeat(Math.max(0, pathDepth - 1));
 
 doctype html

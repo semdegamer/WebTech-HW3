@@ -11,6 +11,27 @@ Our website is a social network for students, allowing users to register, log in
 Users can manage their profiles, browse courses, send friend requests, accept requests, and exchange messages with friends. 
 The application uses a client-server architecture with a Node.js backend and an SQLite database.
 
+Website layout:
+For a non-logged in user, there are 3 pages:
+1. The home page, this is the standard page of our website, giving access to all other pages in the header.
+2. The login page, this page allows the user to login with an email and password.
+3. The register page, this page allows the user to create an account.
+
+For a logged in user, there are 5 main pages:
+1. The home page, this is the standard page of our website, giving access to all other pages in the header.
+2. The Courses page, this page allows the user to select a course, and by pressing the load button,
+   see all students that follow that course that the user can send friend requests to.
+3. The Profile page, by clicking on the profile image in the header, the user can go to their own profile. 
+   There they can change their personal account info, such as enrolled courses and profile picture.
+   Here, they can also view friend requests, and accept or decline them.
+   The profile page can also display the profile of other students, where the shown information depends on whether this studend is a friend or not.
+4. The Friends page, this page allows the user to see all their current friends, and gives to possibility to remove friends.
+5. The Messages page, this page allows the user to view all their chats with friends, and by selecting one open that chat and send messages.
+   The messages are send and recieved in real time, without the need for refreshing the page,
+   but on some devices it may take around a minute for the message to arive, this is suspected to be caused by using a vpn.
+   On the Messages page, you can also make chats with friends, and choose the chat name. You can also make chats with multiple friends.
+
+
 Application structure:
 1. bin/
 Contains the startup scripts for the application.(the www file)
