@@ -7,26 +7,27 @@ block profileContent
     .profile__sections
         .profile__box 
             div.avatar
-            img(src=user.photoLink || "../images/blank-profile.jpg" alt="Avatar" class="profile__avatar")
+                img(src=parseUserImageLink(user.photoLink) alt="Avatar" class="profile__avatar")
 
-            input#avatarInput(type="file" name="avatar" accept="image/*" style="display: none;" onchange="uploadAvatar(this)")
-            button.profile__button(type="button" onclick="document.getElementById('avatarInput').click()") Change Avatar
+                input#avatarInput(type="file" name="avatar" accept="image/*" style="display: none;" onchange="uploadAvatar(this)")
+                button.profile__button(type="button" onclick="document.getElementById('avatarInput').click()") Change Avatar
 
-            h2.profile-name= user.firstName + " " + user.lastName 
+            h2.profile__name= user.firstName + " " + user.lastName 
 
         .profile__box 
             h2.profile-friend Friend Requests
             if friendRequests && friendRequests.length
-                ul.friend-request-list
+                .friends-container
                     each friend in friendRequests
-                        li.friend-request-item(
-                            data-student-id-sender=friend.studentId
-                            data-student-id-receiver=user.studentId
+                        a.friend-banner.content-wrapper.friend-request-item(
+                        href=("profile/" + friend.studendId)
+                        data-student-id-sender=friend.studentId
+                        data-student-id-receiver=user.studentId
                         )
-                            img.profile-pic(src=friend.photoLink || '/images/default-profile.png', alt=friend.firstName + ' ' + friend.lastName)
-                            span= friend.firstName + ' ' + friend.lastName
-                            button.friend-btn.accept(type="button") Accept
-                            button.friend-btn.decline(type="button") Decline
+                            img.friend-banner__avatar(src=parseUserImageLink(friend.photoLink), alt=friend.firstName + ' ' + friend.lastName)
+                            p.friend-banner__name=friend.firstName + ' ' + friend.lastName
+                            button.friend-banner__unfriend.default-button.accept(type="button") Accept
+                            button.friend-banner__unfriend.default-button.decline(type="button") Decline
             else
                 p.no-friend-requests No incoming friend requests.
 
