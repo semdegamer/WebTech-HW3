@@ -56,7 +56,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 	var user = req.session.user;
-	var chat; // TODO: check function scope
+	var chat;
 
 	var name = req.body.name;
 	if (name.length > 100 || !onlyLettersAndNumbers(name))

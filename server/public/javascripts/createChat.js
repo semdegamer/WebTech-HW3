@@ -45,8 +45,7 @@ chatForm.addEventListener('submit', (event) => {
   else
     link = "../messages";
 
-  // TODO: remove search
-  fetch(link + location.search, {
+  fetch(link, {
     method: 'POST',
     headers: {
       'Accept': 'text/plain',
@@ -77,13 +76,12 @@ chatlist.addEventListener("click", (event) => {
     item = event.target;
   if (!item) return;
 
-  // TODO: remove search
   var path = window.location.pathname;
   if (path.endsWith('/'))
     path = path.substring(0, path.length - 1);
 
   if (path.endsWith('messages'))
-    window.location.href = "messages/" + item.getAttribute("chatId") + location.search;
+    window.location.href = "messages/" + item.getAttribute("chatId");
   else
-    window.location.href = item.getAttribute("chatId") + location.search;
+    window.location.href = item.getAttribute("chatId");
 });

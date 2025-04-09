@@ -8,7 +8,6 @@ module.exports = function sessionMiddleware(req, res, next) {
         return req.db.runSql("DELETE FROM Session WHERE sessionId = ?;", [req.cookies.sessionId]);
     };
 
-    // TODO: waarvoor is dit?
     const excludedRoutes = ['/auth/login', '/auth/register']; // Exclude only auth-related routes
     if (excludedRoutes.includes(req.path)) {
         return next(); // Skip middleware for these routes
@@ -22,7 +21,6 @@ module.exports = function sessionMiddleware(req, res, next) {
     if (!sessionId) {
         return next(); // No session, but don't redirect for public routes like `/`
     }
-    // TODO: check sessionId length, if length is not correct, no need for the query.
 
     req.db.getSql("SELECT studentId, expiresAt FROM Session WHERE sessionId = ?", [sessionId])
         .then((session) => {
@@ -30,7 +28,6 @@ module.exports = function sessionMiddleware(req, res, next) {
                 res.clearCookie('sessionId');
                 return next(); // Session expired or invalid, but don't redirect
             }
-            // TODO: extend expiration time of session, since the user is still active.
             return req.db.getSql("SELECT * FROM Student WHERE studentId = ?", [session.studentId]);
         })
         .then((student) => {
@@ -43,7 +40,6 @@ module.exports = function sessionMiddleware(req, res, next) {
         })
         .catch((err) => {
             console.error("Session error:", err);
-            // TODO: if an error happened, it might be better to call next with error
             next(); 
         });
 };
