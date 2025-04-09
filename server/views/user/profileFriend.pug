@@ -7,19 +7,19 @@ block profileContent
     .profile__sections
         .profile__box 
             div.avatar
-                img(src=parseUserImageLink(user.photoLink) alt="Avatar" class="profile__avatar")
+                img(src=parseUserImageLink(viewedUser.photoLink) alt="Avatar" class="profile__avatar")
 
-            h2.profile__name= user.firstName + " " + user.lastName 
+            h2.profile__name= viewedUser.firstName + " " + viewedUser.lastName 
 
         .profile__box
             h2 Email
-            p= user.email
+            p= viewedUser.email
 
             h2 Birth Date
-            p= user.birthDate || 'Not provided'
+            p= viewedUser.birthDate || 'Not provided'
 
             h2 Program
-            p= user.programId || 'Unknown'
+            p= viewedUser.programId || 'Unknown'
 
             h2 Hobbies
-            p= user.hobbies || 'No hobbies listed'
+            p= viewedUser.hobbies || 'No hobbies listed'

@@ -78,7 +78,7 @@ router.get('/:id', async (req, res, next) => {
     const profileFile = isFriend.count > 0 ? 'user/profileFriend' : 'user/profileNoFriend';
 
     res.render(profileFile, {
-      user: profile,
+      viewedUser: profile,
       allCourses: [],
       enrolledCourses: [],
       programs: [],
