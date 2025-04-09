@@ -11,6 +11,14 @@ const numberOfStudents = 50;
 // Path to the database
 const dbPath = path.join(__dirname, 'my.db')
 
+// Check if the database file exists
+const dbFileExists = fs.existsSync('my.db');
+
+if (dbFileExists) {
+  console.log('Database file already exists. Skipping data generation and insertion.');
+} else {
+  console.log('Database file does not exist. Generating and inserting data.');
+
 // Open the database connection
 const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
   if (err) {
@@ -310,3 +318,4 @@ const insertDataIntoDb = async () => {
 };
 
 module.exports = insertDataIntoDb;
+}

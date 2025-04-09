@@ -8,22 +8,12 @@ var bcrypt = require('bcrypt');
 
 var dbhelper = require('./middleware/databaseHelper');
 var sessionMiddleware = require('./middleware/session');
-var insertDataIntoDb = require('./private/populateDatabase');
 
 var publicRouter = require('./routes/public');
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
 
 var app = express();
-
-// Populate the database
-insertDataIntoDb()
-  .then(() => {
-    console.log('Database populated successfully!');
-  })
-  .catch((err) => {
-    console.error('Error populating the database:', err);
-  });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

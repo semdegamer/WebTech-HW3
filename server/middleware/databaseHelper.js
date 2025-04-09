@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt'); // Library for hashing passwords securely
 // the db variable, no value yet because for now the db first needs to be deleted, which is asynchronous
 var dbpath = "private/my.db";
 var db;
+var insertDataIntoDb = require('../private/populateDatabase');
 
 // Function to fill the database with necessary tables and sample data
 const filldb = () => {
@@ -14,6 +15,7 @@ const filldb = () => {
 
   return fsPromises.readFile("private/dbdef.txt")
     .then((sql) => execute(sql.toString()))
+    .then(insertDataIntoDb)
     .then(() => bcrypt.hash("a", 10))
     .then((passwordHash) => 
       runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", 
@@ -24,9 +26,7 @@ const filldb = () => {
 
 // deletes the db if it exists, and then calls fillDb
 if (fs.existsSync(dbpath)) {
-  fsPromises.unlink(dbpath)
-  .then(() => filldb())
-  .catch((err) => console.log(err));
+  db = new sqlite3.Database(dbpath);
 } else {
   filldb()
   .catch((err) => console.log(err));
