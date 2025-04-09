@@ -1,5 +1,5 @@
 /* === General Layout === */
-.main-profile {
+.profile {
     background-color: var(--light-blue-color);
     padding: 20px;
     margin: 95px auto;
@@ -11,7 +11,7 @@
 }
 
 /* === Buttons === */
-.profile-btn {
+.profile__button {
     background-color: var(--light-orange-color);
     color: white;
     border: 3px solid white;
@@ -22,12 +22,12 @@
     transition: background-color 0.1s ease-in-out;
 }
 
-.profile-btn:hover {
+.profile__button:hover {
     background-color: var(--dark-orange-color);
 }
 
 /* === Profile Sections === */
-.profile-sections {
+.profile__sections {
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -35,7 +35,7 @@
     padding: 0 20px;
 }
 
-.profile-box {
+.profile__box {
     background-color: var(--dark-blue-color);
     height: 600px;
     border-radius: 15px;
@@ -47,26 +47,26 @@
 }
 
 /* Box-specific flex settings */
-.profile-box:first-child {
+.profile__box:first-child {
     flex: 0 0 25%;
 }
 
-.profile-box:nth-child(2),
-.profile-box:nth-child(3) {
+.profile__box:nth-child(2),
+.profile__box:nth-child(3) {
     padding-top: 20px;
     justify-content: flex-start;
 }
 
-.profile-box:nth-child(2) {
+.profile__box:nth-child(2) {
     flex: 0 0 25%;
 }
 
-.profile-box:nth-child(3) {
+.profile__box:nth-child(3) {
     flex: 0 0 50%;
 }
 
 /* === Avatar and Name === */
-.avatar-img {
+.profile__avatar {
     width: 250px;
     height: 250px;
     border-radius: 50%;
@@ -241,32 +241,32 @@
     cursor: pointer;
 }
 
-.course-box .profile-btn {
+.course-box .profile__button {
     width: 200px;
     margin: 5px;
 }
 
 /* === Responsive Layout === */
 @media (max-width: 950px) {
-    .profile-sections {
+    .profile__sections {
         flex-direction: column;
         align-items: center;
         gap: 20px;
     }
 
-    .profile-box {
+    .profile__box {
         width: 100%;
         height: auto;
         margin-bottom: 20px;
     }
 
-    .profile-box:first-child,
-    .profile-box:nth-child(2),
-    .profile-box:nth-child(3) {
+    .profile__box:first-child,
+    .profile__box:nth-child(2),
+    .profile__box:nth-child(3) {
         flex: 0 0 100%;
     }
 
-    .avatar-img {
+    .profile__avatar {
         width: 150px;
         height: 150px;
         margin-top: 20px;

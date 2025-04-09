@@ -1,0 +1,89 @@
+extends profile
+
+block append vars
+  - var pathDepth = 2;
+
+block profileContent
+    .profile__sections
+        .profile__box 
+            div.avatar
+            img(src=user.photoLink || "../images/blank-profile.jpg" alt="Avatar" class="profile__avatar")
+
+            input#avatarInput(type="file" name="avatar" accept="image/*" style="display: none;" onchange="uploadAvatar(this)")
+            button.profile__button(type="button" onclick="document.getElementById('avatarInput').click()") Change Avatar
+
+            h2.profile-name= user.firstName + " " + user.lastName 
+
+        .profile__box 
+            h2.profile-friend Friend Requests
+            if friendRequests && friendRequests.length
+                ul.friend-request-list
+                    each friend in friendRequests
+                        li.friend-request-item(
+                            data-student-id-sender=friend.studentId
+                            data-student-id-receiver=user.studentId
+                        )
+                            img.profile-pic(src=friend.photoLink || '/images/default-profile.png', alt=friend.firstName + ' ' + friend.lastName)
+                            span= friend.firstName + ' ' + friend.lastName
+                            button.friend-btn.accept(type="button") Accept
+                            button.friend-btn.decline(type="button") Decline
+            else
+                p.no-friend-requests No incoming friend requests.
+
+        .profile__box 
+            h2.profile-edit Edit Profile
+            form.profile-form#profileForm
+            .input-group
+                label(for="firstName") First Name
+                input#firstName(type="text" name="firstName" value=user.firstName required)
+            .input-group
+                label(for="lastName") Last Name
+                input#lastName(type="text" name="lastName" value=user.lastName required)
+            .input-group
+                label(for="birthDate") Birth Date
+                input#birthDate(type="date" name="birthDate" value=user.birthDate)
+
+            .input-group
+                label(for="programId") Program
+                select#programId(name="programId" required)
+                    if programs && programs.length
+                        each program in programs
+                            option(value=program.programId selected=(program.programId == user.programId))= program.name
+                    else
+                        option(disabled selected) No programs available
+
+            .input-group.email
+                label(for="email") Email
+                input#email(type="email" name="email" value=user.email required)
+
+            .input-group.hobbies
+                label(for="hobbies") Hobbies
+                input#hobbies(type="text" name="hobbies" value=user.hobbies)
+
+            button.profile__button(type="button" onclick="updateProfile()") Save Profile
+
+
+    .course-box 
+        h2.profile-edit Edit Courses
+
+        .input-group
+            label(for="availableCourses") Available Courses
+            select#availableCourses(multiple size=5)
+                if allCourses && allCourses.length
+                    each course in allCourses
+                        option(value=course.courseID) #{course.name} (#{course.code})
+                else
+                    option(disabled) No courses available
+            button.profile__button(type="button" onclick="enrollCourse()") Enroll
+
+        .input-group
+            label(for="enrolledCourses") Enrolled Courses
+            select#enrolledCourses(multiple size=5)
+                if enrolledCourses && enrolledCourses.length
+                    each course in enrolledCourses
+                        option(value=course.courseID) #{course.name} (#{course.code})
+                else
+                    option(disabled) No enrolled courses
+            button.profile__button(type="button" onclick="deselectCourse()") Deselect
+    
+    script(src="../javascripts/profile.js")
