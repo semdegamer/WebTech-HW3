@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const fsPromises = require('fs/promises');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
-const { OPEN_CREATE } = require('sqlite3');
 
 // Number of students to generate
 const numberOfStudents = 50;
