@@ -3,15 +3,17 @@ const { faker } = require('@faker-js/faker');
 const bcrypt = require('bcrypt');
 const fsPromises = require('fs/promises');
 const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+const { OPEN_CREATE } = require('sqlite3');
 
 // Number of students to generate
 const numberOfStudents = 50;
 
 // Path to the database
-const dbPath = 'private/my.db';
+const dbPath = path.join(__dirname, 'my.db')
 
 // Open the database connection
-const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
   if (err) {
     console.error('Error opening database:', err);
     return;
