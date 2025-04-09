@@ -48,6 +48,10 @@ a.course-button {
   cursor: not-allowed;
 }
 
+.profile-pic {
+  width: 10%;
+}
+
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
   /* Adjustments for the main courses section */
