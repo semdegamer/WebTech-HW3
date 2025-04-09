@@ -1,3 +1,4 @@
+/* === Manages user sessions: checks session validity, creates sessions, and attaches user info to response locals for templating. === */
 const crypto = require('crypto');
 const dayjs = require('dayjs');
 

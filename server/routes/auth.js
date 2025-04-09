@@ -1,3 +1,4 @@
+/* === Handles user login and registration routes with middleware for authentication and session management. === */
 const express = require('express');
 const router = express.Router();
 

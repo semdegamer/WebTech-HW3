@@ -1,3 +1,4 @@
+/* === Handles initialization and interaction with the SQLite database. Attaches database utility functions to requests for use in middleware. === */
 const sqlite3 = require("sqlite3").verbose(); // verbose for better error logging
 const fs = require("fs");
 const fsPromises = require("fs/promises");
@@ -31,32 +32,6 @@ if (fs.existsSync(dbpath)) {
   filldb()
   .catch((err) => console.log(err));
 }
-
-// Open the database
-const openDb = () => {
-  if (!db) {
-    db = new sqlite3.Database(dbpath, sqlite3.OPEN_READWRITE, (err) => {
-      if (err) {
-        console.error('Error opening database:', err);
-      } else {
-        console.log('Connected to the database.');
-      }
-    });
-  }
-};
-
-// Close the database connection
-const closeDb = () => {
-  if (db) {
-    db.close((err) => {
-      if (err) {
-        console.error('Error closing database:', err);
-      } else {
-        console.log('Database connection closed.');
-      }
-    });
-  }
-};
 
 // for simply executing a sql queries without params
 const execute = async (sql, localDb) => {
@@ -110,8 +85,6 @@ const allSql = (sql, params = [], localDb) => new Promise((res, rej) => {
 function dbHelper(req, res, next) {
   req.db = {
     baseDb: db,
-    openDb: openDb,
-    closeDb: closeDb,
     runSql: runSql,
     getSql: getSql,
     allSql: allSql

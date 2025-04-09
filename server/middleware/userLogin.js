@@ -1,3 +1,4 @@
+/* === Handles student login: verifies credentials, creates a session, and returns login status as JSON. === */
 const bcrypt = require('bcrypt'); 
 const { createSession } = require('../middleware/session');
 

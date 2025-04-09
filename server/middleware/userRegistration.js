@@ -1,3 +1,4 @@
+/* === Handles student registration: validates input, uploads avatar, saves user data, enrolls in program, and creates a session. === */
 const bcrypt = require('bcrypt');
 const { createSession } = require('../middleware/session');
 const multer = require('multer');

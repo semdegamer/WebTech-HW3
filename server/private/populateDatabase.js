@@ -1,3 +1,4 @@
+/* === Populates the database with fake students, programs, courses, enrollments, and friendships using Faker and SQLite. === */
 const fs = require('fs');
 const { faker } = require('@faker-js/faker');
 const bcrypt = require('bcrypt');

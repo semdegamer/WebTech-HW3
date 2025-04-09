@@ -1,3 +1,4 @@
+/* === User Pages Route Handler === */
 const express = require('express');
 const sessionMiddleware = require('../middleware/session');
 const dayjs = require('dayjs'); 

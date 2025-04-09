@@ -80,8 +80,8 @@ header {
     margin-bottom: -30px;
 }
 
-.profile-name {
-    margin-top: 10px;
+.profile__name {
+    margin-top: 20px;
     font-size: 3rem;
 }
 

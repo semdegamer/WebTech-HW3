@@ -1,3 +1,4 @@
+/* === Periodically removes expired sessions from the database to keep the Session table clean and efficient. === */
 const dayjs = require('dayjs');
 
 module.exports = function cleanupSessions(db) {
