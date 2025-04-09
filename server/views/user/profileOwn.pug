@@ -7,12 +7,12 @@ block profileContent
     .profile__sections
         .profile__box 
             div.avatar
-            img(src=user.photoLink || "../images/blank-profile.jpg" alt="Avatar" class="profile__avatar")
+                img(src=parseUserImageLink(user.photoLink) alt="Avatar" class="profile__avatar")
 
-            input#avatarInput(type="file" name="avatar" accept="image/*" style="display: none;" onchange="uploadAvatar(this)")
-            button.profile__button(type="button" onclick="document.getElementById('avatarInput').click()") Change Avatar
+                input#avatarInput(type="file" name="avatar" accept="image/*" style="display: none;" onchange="uploadAvatar(this)")
+                button.profile__button(type="button" onclick="document.getElementById('avatarInput').click()") Change Avatar
 
-            h2.profile-name= user.firstName + " " + user.lastName 
+            h2.profile__name= user.firstName + " " + user.lastName 
 
         .profile__box 
             h2.profile-friend Friend Requests

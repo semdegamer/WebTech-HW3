@@ -7,9 +7,9 @@ block profileContent
   .profile__sections
       .profile__box 
           div.avatar
-          img(src=user.photoLink || "../images/blank-profile.jpg" alt="Avatar" class="profile__avatar")
+            img(src=parseUserImageLink(user.photoLink) alt="Avatar" class="profile__avatar")
 
-          h2.profile-name= user.firstName + " " + user.lastName 
+          h2.profile__name= user.firstName + " " + user.lastName 
 
       .profile__box
           p This user is not your friend, so you can only view limited information.
