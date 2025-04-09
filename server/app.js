@@ -42,31 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(dbhelper);
 app.use(sessionMiddleware);
-
-// TODO: can this be moved to sessionMiddleware
-// Ensure the name and photolink is available on all pages
-app.use((req, res, next) => {
-  if (req.session && req.session.user) {
-    req.db.getSql(
-      "SELECT firstName, lastName, photoLink FROM Student WHERE studentId = ?;",
-      [req.session.user.studentId]
-    )
-      .then((user) => {
-        res.locals.user = user || req.session.user; // Attach user to res.locals
-        console.log("User object in middleware:", res.locals.user); // Debug statement
-        next();
-      })
-      .catch((err) => {
-        console.error("Error fetching user:", err);
-        res.locals.user = req.session.user || null; // Fallback to session user
-        next();
-      });
-  } else {
-    res.locals.user = null; // No user logged in
-    console.log("No user logged in."); // Debug statement
-    next();
-  }
-});
+app.use(sessionMiddleware.attachUserToLocals);
 
 app.use('/', publicRouter);
 app.use('/auth', authRouter);
