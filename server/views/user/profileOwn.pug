@@ -34,32 +34,32 @@ block profileContent
         .profile__box 
             h2.profile-edit Edit Profile
             form.profile-form#profileForm
-            .input-group
-                label(for="firstName") First Name
-                input#firstName(type="text" name="firstName" value=user.firstName required)
-            .input-group
-                label(for="lastName") Last Name
-                input#lastName(type="text" name="lastName" value=user.lastName required)
-            .input-group
-                label(for="birthDate") Birth Date
-                input#birthDate(type="date" name="birthDate" value=user.birthDate)
+                .input-group
+                    label(for="firstName") First Name
+                    input#firstName(type="text" name="firstName" value=user.firstName required)
+                .input-group
+                    label(for="lastName") Last Name
+                    input#lastName(type="text" name="lastName" value=user.lastName required)
+                .input-group
+                    label(for="birthDate") Birth Date
+                    input#birthDate(type="date" name="birthDate" value=user.birthDate)
 
-            .input-group
-                label(for="programId") Program
-                select#programId(name="programId" required)
-                    if programs && programs.length
-                        each program in programs
-                            option(value=program.programId selected=(program.programId == user.programId))= program.name
-                    else
-                        option(disabled selected) No programs available
+                .input-group
+                    label(for="programId") Program
+                    select#programId(name="programId" required)
+                        if programs && programs.length
+                            each program in programs
+                                option(value=program.programId selected=(program.programId == user.programId))= program.name
+                        else
+                            option(disabled selected) No programs available
 
-            .input-group.email
-                label(for="email") Email
-                input#email(type="email" name="email" value=user.email required)
+                .input-group.email
+                    label(for="email") Email
+                    input#email(type="email" name="email" value=user.email required)
 
-            .input-group.hobbies
-                label(for="hobbies") Hobbies
-                input#hobbies(type="text" name="hobbies" value=user.hobbies)
+                .input-group.hobbies
+                    label(for="hobbies") Hobbies
+                    input#hobbies(type="text" name="hobbies" value=user.hobbies)
 
             button.profile__button(type="button" onclick="updateProfile()") Save Profile
 
