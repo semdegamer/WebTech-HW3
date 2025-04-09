@@ -24,7 +24,7 @@ const upload = multer({ storage });
 /* ========== ROUTES ========== */
 
 // GET Own Profile
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   const studentId = req.session.user.studentId;
   try {
     const [profile, allCourses, enrolledCourses, programs, friendRequests] = await Promise.all([
@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
       `, [studentId])
     ]);
 
-    res.render('user/profile', {
+    res.render('user/profileOwn', {
       user: profile,
       allCourses,
       enrolledCourses,
@@ -50,12 +50,12 @@ router.get('/', async (req, res) => {
     });
   } catch (err) {
     console.error("Error loading own profile:", err);
-    res.render('user/profile', { error: "Error loading profile.", viewType: 'own' });
+    next(err);
   }
 });
 
 // GET Another User’s Profile
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   const viewerId = req.session.user.studentId;
   const viewedId = req.params.id;
 
@@ -65,7 +65,7 @@ router.get('/:id', async (req, res) => {
       FROM Student WHERE studentId = ?`, [viewedId]);
 
     if (!profile) {
-      return res.status(404).render('user/profile', { error: "User not found", viewType: 'unknown' });
+      return res.status(404).render('user/profile', { error: "User not found", viewType: 'nofriend' });
     }
 
     const isFriend = await req.db.getSql(`
@@ -74,20 +74,19 @@ router.get('/:id', async (req, res) => {
       WHERE f1.studentId = ? AND f2.studentId = ?
     `, [viewerId, viewedId]);
 
-    const viewType = isFriend.count > 0 ? 'friend' : 'unknown';
+    const profileFile = isFriend.count > 0 ? 'user/profileFriend' : 'user/profileNoFriend';
 
-    res.render('user/profile', {
+    res.render(profileFile, {
       user: profile,
       allCourses: [],
       enrolledCourses: [],
       programs: [],
       friendRequests: [],
-      viewType
     });
 
   } catch (err) {
     console.error("Error viewing other profile:", err);
-    res.render('user/profile', { error: "Error loading user profile", viewType: 'unknown' });
+    next(err);
   }
 });
 

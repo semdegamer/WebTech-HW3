@@ -1,0 +1,25 @@
+extends profile
+
+block append vars
+  - var pathDepth = 3;
+
+block profileContent
+    .profile__sections
+        .profile__box 
+            div.avatar
+            img(src=user.photoLink || "../images/blank-profile.jpg" alt="Avatar" class="profile__avatar")
+
+            h2.profile-name= user.firstName + " " + user.lastName 
+
+        .profile__box
+            h2 Email
+            p= user.email
+
+            h2 Birth Date
+            p= user.birthDate || 'Not provided'
+
+            h2 Program
+            p= user.programId || 'Unknown'
+
+            h2 Hobbies
+            p= user.hobbies || 'No hobbies listed'
