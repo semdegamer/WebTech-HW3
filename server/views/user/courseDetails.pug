@@ -81,7 +81,8 @@ block main
       // adds click listeners to all active "Send Friend Request" buttons
       function attachFriendRequestListeners() {
         document.querySelectorAll('.friend-request-btn:not([disabled])').forEach(btn => {
-          btn.addEventListener('click', function () {
+          btn.addEventListener('click', function (event) {
+            event.preventDefault();
             const studentId = btn.getAttribute('data-student-id');
             const courseId = window.location.pathname.split('/').pop();
 
