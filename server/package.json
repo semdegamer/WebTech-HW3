@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.6.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "~1.4.4",
     "dayjs": "^1.11.13",

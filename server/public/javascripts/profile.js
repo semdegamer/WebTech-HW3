@@ -4,7 +4,7 @@ function updateProfile() {
 
     console.log("Form data:", Object.fromEntries(formData.entries())); // Debugging
 
-    fetch('/user/update', {
+    fetch('profile/update', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded', // Set the content type to URL-encoded
@@ -32,7 +32,7 @@ function uploadAvatar(input) {
     const formData = new FormData();
     formData.append('avatar', file);
 
-    fetch('/user/upload-avatar', {
+    fetch('profile/upload-avatar', {
       method: 'POST',
       body: formData,
     })
@@ -56,7 +56,7 @@ async function enrollCourse() {
     const courseId = document.getElementById('availableCourses').value;
     if (courseId) {
       try {
-        const response = await fetch('/user/enroll', {
+        const response = await fetch('profile/enroll', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ courseId, action: 'enroll' })
@@ -82,7 +82,7 @@ async function deselectCourse() {
     const courseId = document.getElementById('enrolledCourses').value;
     if (courseId) {
       try {
-        const response = await fetch('/user/enroll', {
+        const response = await fetch('profile/enroll', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ courseId, action: 'deselect' })
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle accepting the friend request
     if (acceptBtn) {
       acceptBtn.addEventListener('click', () => {
-        fetch('/user/friend-request/accept', {
+        fetch('profile/friend-request/accept', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle declining the friend request
     if (declineBtn) {
       declineBtn.addEventListener('click', () => {
-        fetch('/user/friend-request/decline', {
+        fetch('profile/friend-request/decline', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
