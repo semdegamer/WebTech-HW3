@@ -1,3 +1,4 @@
+/* === Handles profile updates, avatar uploads, course enrollments, and friend request management. === */
 function updateProfile() {
     const form = document.getElementById("profileForm");
     const formData = new URLSearchParams(new FormData(form)); // Convert FormData to URLSearchParams

@@ -1,3 +1,4 @@
+/* === Handles initialization and interaction with the SQLite database. Attaches database utility functions to requests for use in middleware. === */
 const sqlite3 = require("sqlite3").verbose(); // verbose for better error logging
 const fs = require("fs");
 const fsPromises = require("fs/promises");

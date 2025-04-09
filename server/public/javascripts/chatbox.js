@@ -1,3 +1,4 @@
+/* === Handles real-time chat message sending and receiving using Fetch and Server-Sent Events (SSE). === */
 const form = document.getElementById("message-form");
 const messageBox = document.getElementById("message-box");
 const messageCon = document.querySelector(".chatbox__container");

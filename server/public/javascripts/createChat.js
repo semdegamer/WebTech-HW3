@@ -1,3 +1,4 @@
+/* === Manages chat creation UI, form submission, and navigation to selected chats. === */
 const addButton = document.getElementById("add-chat-button");
 const chatlist = document.querySelector(".chats__container");
 const chatFormWrapper = document.querySelector(".chats__create");

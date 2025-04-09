@@ -1,3 +1,4 @@
+/* === Manages the toggling of chatbox visibility and layout for mobile responsiveness. === */
 window.addEventListener("load", () => {
   const toggles = document.querySelectorAll(".toggle-chats");
   const chatbox = document.querySelector(".chatbox");

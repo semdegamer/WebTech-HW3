@@ -1,3 +1,4 @@
+/* === Handles unfriend action by sending a request to remove a friend from the user's friend list. === */
 const unfriendButtons = document.querySelectorAll(".friend-banner__unfriend");
 
 unfriendButtons.forEach(el => el.addEventListener('click', unfriend));
