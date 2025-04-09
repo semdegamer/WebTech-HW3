@@ -34,7 +34,7 @@ block main
 
       // Add click event listener to the "Load Students" button
       loadBtn.addEventListener('click', function () {
-        fetch(`/user/courses/${courseId}/students`)
+        fetch(`${courseId}/students`)
           .then(res => res.json())
           .then(data => {
             if (data.students && data.students.length > 0) {
@@ -42,7 +42,7 @@ block main
               // Loop over each student and build the student UI
               data.students.forEach(student => {
                 // Always link to /user/profile/studentId
-                const profileUrl = `/user/profile/${student.studentId}`;
+                const profileUrl = `../profile/${student.studentId}`;
 
                 const studentEl = document.createElement('a');
                   studentEl.href = profileUrl; 
@@ -87,7 +87,7 @@ block main
             const courseId = window.location.pathname.split('/').pop();
 
             // Send a POST request to trigger the friend request
-            fetch(`/user/courses/${courseId}/friend-request`, {
+            fetch(`${courseId}/friend-request`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

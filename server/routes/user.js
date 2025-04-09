@@ -33,7 +33,7 @@ router.use(function (req, res, next) {
   if (!req.loggedIn) {
     switch (req.method) {
       case 'GET':
-        return res.redirect('/auth/login');
+        return res.status(401);
       case 'POST':
         return res.status(401);
       case 'PUT':
