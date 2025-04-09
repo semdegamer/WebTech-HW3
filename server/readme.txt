@@ -130,6 +130,15 @@ Message: Stores messages exchanged in chats.
 ChatParticipent: Links students to chat sessions.
 Session: Tracks user sessions for authentication.
 
+
+Brief explanation of our database layout:
+The core of our layout is the Student Table, that stores all info about a student.
+There is a friendship table, where Students can be related to a friendship through the Friend table.
+There should only be 2 students related to one friendshipId.
+There is the Chat table, that can have multiple chat participents as stored in the ChatParticipent table.
+And a Message table that stores all messages with the person who send it and the chat it was send in.
+And there is also the Session table, that stores our sessions.
+
 The SQL definition of our database:
 CREATE TABLE Program (
   programId INTEGER PRIMARY KEY AUTOINCREMENT,
