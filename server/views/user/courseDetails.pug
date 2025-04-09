@@ -29,6 +29,9 @@ block main
       const container = document.getElementById('students-container');
       const courseId = window.location.pathname.split('/').pop();
 
+      const base = "#{base}";
+      const parseUserImageLink = !{String(parseUserImageLink)};
+
       // Add click event listener to the "Load Students" button
       loadBtn.addEventListener('click', function () {
         fetch(`/user/courses/${courseId}/students`)
@@ -43,7 +46,7 @@ block main
                 studentEl.className = 'course-button';
 
                 studentEl.innerHTML = `
-                  <img class="profile-pic" src="${student.photoLink || '/images/default-profile.png'}" alt="${student.firstName} ${student.lastName}" />
+                  <img class="profile-pic" src="${parseUserImageLink(student.photoLink)}" alt="${student.firstName} ${student.lastName}" />
                   <div class="course-button-content">
                     <h4>${student.firstName} ${student.lastName}</h4>
                     ${

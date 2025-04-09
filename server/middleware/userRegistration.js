@@ -34,7 +34,7 @@ function userRegister(req, res) {
     console.log('Request body:', req.body);
     console.log('File uploaded:', req.file);
 
-    const { firstName, lastName, email, password, birthDate, hobbies, courseIds } = req.body;
+    const { firstName, lastName, email, password, birthDate, hobbies, courseIds, programId } = req.body;
     const avatarPath = req.file ? `/images/user-images/${req.file.filename}` : null; // Avatar file path
 
     // Validate input fields
@@ -76,7 +76,7 @@ function userRegister(req, res) {
       .then((hashedPassword) => {
         // Insert new student into the database with avatar path
         return req.db.runSql(
-          "INSERT INTO Student (firstName, lastName, email, password, birthDate, hobbies, photoLink) VALUES (?, ?, ?, ?, ?, ?, ?);",
+          "INSERT INTO Student (firstName, lastName, email, password, birthDate, hobbies, photoLink, programId) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
           [
             firstName,
             lastName,
@@ -84,7 +84,8 @@ function userRegister(req, res) {
             hashedPassword,
             birthDate || null,
             hobbies || null,
-            avatarPath // Save avatar path in the database
+            avatarPath,
+            programId || null
           ]
         );
       })
@@ -98,13 +99,19 @@ function userRegister(req, res) {
           return res.json({ success: false, message: "User not found after registration." });
         }
 
+        // Enroll the student in the selected program
+        const programEnroll = req.db.runSql(
+          "INSERT INTO ProgramEnrollment (studentId, programId) VALUES (?, ?);",
+          [student.studentId, programId]
+        );
+
         // Enroll the student in selected courses, if any
         const enrollments = (courseIds || []).map(courseId =>
           req.db.runSql("INSERT INTO CourseEnrollment (studentId, courseId) VALUES (?, ?)", [student.studentId, courseId])
         );
 
         // Create a session for the newly registered student and process course enrollments
-        return Promise.all([createSession(req.db, student, res), ...enrollments]);
+        return Promise.all([programEnroll, createSession(req.db, student, res), ...enrollments]);
       })
       .then(() => {
         // Respond to the client with a success message

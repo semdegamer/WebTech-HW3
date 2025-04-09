@@ -114,7 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle accepting the friend request
     if (acceptBtn) {
-      acceptBtn.addEventListener('click', () => {
+      acceptBtn.addEventListener('click', event => {
+        event.preventDefault();
+
         fetch('profile/friend-request/accept', {
           method: 'POST',
           headers: {
@@ -138,7 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle declining the friend request
     if (declineBtn) {
-      declineBtn.addEventListener('click', () => {
+      declineBtn.addEventListener('click', event => {
+        event.preventDefault();
+
         fetch('profile/friend-request/decline', {
           method: 'POST',
           headers: {
