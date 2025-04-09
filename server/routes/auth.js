@@ -24,14 +24,16 @@ router.post('/login', userLogin);
 router.get('/register', async function(req, res) {
   try {
     const courses = await req.db.allSql("SELECT courseID, name FROM Course;");
+    const programs = await req.db.allSql("SELECT * FROM Program;");
     res.render('auth/register', {
-      courses: courses || []
+      courses: courses || [],
+      programs: programs || []
     });
   } catch (err) {
-    console.error("Error fetching courses:", err);
+    console.error("Error fetching courses/ programs:", err);
     res.render('auth/register', {
       courses: [],
-      error: "Failed to load courses. Please try again later."
+      error: "Failed to load courses/ programs. Please try again later."
     });
   }
 });
