@@ -40,6 +40,12 @@ block main
       label(for="hobbies") Hobbies (comma separated):
       input(type="text", id="hobbies", name="hobbies", placeholder="e.g. reading, coding")
 
+      //- Programs Dropdown
+      label(for="programId") Select Program:
+      select(id="programId", name="programId", multiple size="5")
+        each program in programs
+          option(value=program.programID) #{program.name}
+
       //- Courses Dropdown
       label(for="courses") Enroll in courses (Press shift/ ctrl to select multiple):
       select(id="courseIds", name="courseIds", multiple size="5")
@@ -69,6 +75,10 @@ block main
       let confirmPassword = document.getElementById("confirmPassword").value;
       let birthDate = document.getElementById("birthDate").value;
       let hobbies = document.getElementById("hobbies").value.trim();
+
+      // Get Programs
+      let programId = document.getElementById("programId").value;
+      formData.append("programId", programId);
 
       // Get selected courses (multiple selections allowed)
       let courseSelect = document.getElementById("courseIds");
