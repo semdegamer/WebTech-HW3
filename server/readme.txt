@@ -89,6 +89,11 @@ Student: Name=Mafalda Quitzon, Email=mafalda.quitzon@example.com, Password=a
 Student: Name=Kameron Becker, Email=kameron.becker@example.com, Password=a
 Student: Name=Erica Langworth, Email=erica.langworth@example.com, Password=a
 
+The following students have a message history on the server:
+ashton mertz with tyler heidenreich
+tyler kundle with laron roberts
+domenic howell with hanna emard
+
 Database Structure:
 The database is implemented using SQLite and consists of the following tables:
 
