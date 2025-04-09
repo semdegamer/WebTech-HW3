@@ -218,4 +218,15 @@ router.post('/friend-request/decline', async (req, res) => {
   }
 });
 
+//Logout
+router.post('/logout', async (req, res, next) => {
+  req.endSession()
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
 module.exports = router;

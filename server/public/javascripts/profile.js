@@ -166,3 +166,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+document.getElementById("log-out-button").addEventListener("click", event => {
+  fetch('profile/logout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }
+  })
+  .then(res => {
+    window.location.href = "../";
+  })
+  .catch(err => {
+    console.error('Error accepting friend request:', err);
+  });
+});

@@ -4,6 +4,10 @@ const dayjs = require('dayjs');
 
 // Middleware to check session validity
 module.exports = function sessionMiddleware(req, res, next) {
+    req.endSession = function() {
+        return req.db.runSql("DELETE FROM Session WHERE sessionId = ?;", [req.cookies.sessionId]);
+    };
+
     // TODO: waarvoor is dit?
     const excludedRoutes = ['/auth/login', '/auth/register']; // Exclude only auth-related routes
     if (excludedRoutes.includes(req.path)) {

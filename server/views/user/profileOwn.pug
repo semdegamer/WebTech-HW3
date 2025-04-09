@@ -13,6 +13,8 @@ block profileContent
                 button.profile__button(type="button" onclick="document.getElementById('avatarInput').click()") Change Avatar
 
             h2.profile__name= user.firstName + " " + user.lastName 
+            
+            button#log-out-button.profile__button(type="button") Log Out
 
         .profile__box 
             h2.profile-friend Friend Requests
