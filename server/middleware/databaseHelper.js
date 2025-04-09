@@ -17,11 +17,6 @@ const filldb = () => {
   return fsPromises.readFile("private/dbdef.txt")
     .then((sql) => execute(sql.toString()))
     .then(insertDataIntoDb)
-    .then(() => bcrypt.hash("a", 10))
-    .then((passwordHash) => 
-      runSql("INSERT INTO Student(firstName, lastName, email, password) VALUES(?, ?, ?, ?);", 
-        ["sem", "mathan", "a@a", passwordHash])
-    )
     .catch((err) => console.error("Error filling the database:", err));
 };
 

@@ -43,7 +43,7 @@ const generateRandomStudentData = async () => {
     const lastName = faker.person.lastName();
     const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
 
-    console.log(`Generated email for ${firstName} ${lastName}: ${email}`); // Log the email
+    console.log(`Student: Name=${firstName} ${lastName}, Email=${email}, Password=a`); // Log the email
 
     const birthDate = faker.date.between({
       from: new Date(new Date().setFullYear(new Date().getFullYear() - 25)),
