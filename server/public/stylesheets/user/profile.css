@@ -26,6 +26,12 @@
     background-color: var(--dark-orange-color);
 }
 
+header {
+    position: sticky;
+    top: 0;
+    flex: 0 1 auto;
+  }
+
 /* === Profile Sections === */
 .profile__sections {
     display: flex;
